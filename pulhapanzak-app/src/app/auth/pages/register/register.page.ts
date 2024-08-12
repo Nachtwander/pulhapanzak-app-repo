@@ -1,0 +1,123 @@
+import { Component, OnInit, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { registerDto } from '../../models/register.dto';
+import {
+  FormsModule,
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+  AbstractControl,
+} from '@angular/forms';
+import {
+  IonContent,
+  IonHeader,
+  IonTitle,
+  IonToolbar,
+  IonItem,
+  IonInput,
+  IonLabel,
+  IonButton,
+  IonSpinner,
+  IonNote,
+} from '@ionic/angular/standalone';
+
+
+@Component({
+  selector: 'app-register',
+  templateUrl: './register.page.html',
+  styleUrls: ['./register.page.scss'],
+  standalone: true,
+  imports: [
+    IonContent,
+    IonHeader,
+    IonTitle,
+    IonToolbar,
+    CommonModule,
+    FormsModule,
+    IonItem,
+    IonInput,
+    IonLabel,
+    IonButton,
+    IonSpinner,
+    ReactiveFormsModule, //importamos para poder hacer el Binding <form [formGroup]="registerForm">
+    IonNote,
+  ],
+})
+export class RegisterPage implements OnInit {
+  /*
+  "Estamos creando una propiedad privada llamada formBuilder que es del tipo FormBuilder, y la estamos inicializando 
+  usando la función inject para obtener una instancia de FormBuilder."
+  Esto significa que formBuilder será una instancia de FormBuilder, obtenida a través de la inyección de dependencias, 
+  lo que permite que la clase que contiene esta línea pueda usar formBuilder para construir 
+  formularios reactivos o realizar otras operaciones relacionadas con formularios en Angular.
+  */
+  private formBuilder: FormBuilder = inject(FormBuilder);
+
+  //variable que implementa la interfaz registerDTO
+  registerDTO: registerDto = {} as registerDto
+
+   //variable para controlar si se muestra la animacion de circulo de carga en el boton Registrar
+   spinner: boolean = false;
+
+  /*
+  "Estamos creando una propiedad llamada registerForm, que es del tipo FormGroup. Inicialmente, 
+  la estamos configurando como un grupo vacío utilizando el método group del formBuilder." 
+  En términos más simples:
+  -> registerForm es una variable que almacenará un formulario.
+  -> FormGroup es el tipo de esta variable, indicando que es un grupo de controles de formulario.
+  -> this.formBuilder.group({}) es el método que usamos para crear un grupo de controles de formulario. 
+     En este caso, estamos creando un formulario reactivo llamado registerForm, que es un FormGroup 
+     con varios campos: nombres, apellidos, email, password, dni y telefono. 
+     Cada uno de estos campos se inicializa con un valor vacío, lo que significa que están listos para ser llenados
+      por el usuario."
+  */
+  registerForm: FormGroup = this.formBuilder.group({
+    nombres: ['', [Validators.required]],
+    apellidos: ['', [Validators.required]],
+    email: ['', [Validators.required, Validators.email]],
+    password: ['', [Validators.required, Validators.minLength(6)]],
+    dni: ['', [Validators.required, Validators.minLength(13), Validators.maxLength(13), Validators.pattern(/^[0-9]+$/ )]],
+    telefono: ['', [Validators.required]],
+  });
+
+ 
+
+  //get para verificar si el formulario es invalido y si es true desativa el boton con [disabled]
+  get isFormInvalid(): boolean {
+    return this.registerForm.invalid;
+  }
+
+  //get que verifica que el campo correo no sea nulo, si el usuario no ingresa un correo valido
+  get isEmailRequired(): boolean {
+    const control: AbstractControl | null = this.registerForm.get('email');
+      return control ? control.hasError('required') && control.touched : false;
+  }
+
+  get isEmailInvalid(): boolean {
+    const control: AbstractControl | null = this.registerForm.get('email');
+      return control ? control.hasError('email') && control.touched : false;
+  }
+
+
+  //get que verifica que el campo contraseña no sea nulo
+   // y toca sin ingresar datos se mostrara el ion-note *
+  get isPasswordInvalid(): boolean {
+    const control: AbstractControl | null = this.registerForm.get('password');
+      return control ? control.invalid && control.touched : false;
+  }
+
+  //funcion save del ngSubmit del form
+  save(): void {
+    this.registerDTO = this.registerForm.value as registerDto;
+    console.log("registro =>", this.registerDTO);
+    this.spinner = true;
+    setTimeout(()=>{
+      this.registerForm.reset()
+      this.spinner = false;
+    }, 10000)
+  }
+
+  // REVISAR REPETICION EN TIEMPO 01:19:00
+  ngOnInit() {}
+}
