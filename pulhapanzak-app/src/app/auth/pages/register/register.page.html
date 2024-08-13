@@ -1,148 +1,156 @@
-<ion-header [translucent]="true" >
-  <ion-toolbar style="--background: red;">
+<ion-header [translucent]="true">
+  <ion-toolbar style="--background: red">
     <ion-title>auth/pages/register/register.page</ion-title>
   </ion-toolbar>
 </ion-header>
-
 
 <!--
 Clean Architecture: cada instancia en la carpeta app tendra una estructura de la siguiente forma:
 components - models - pages - services 
 -->
-<ion-content [fullscreen]="true" style="display: flex; justify-content: center; align-items: center; height: 100%; --background: #ffffff; padding: 16px;">
-  <h2 style="display: flex; justify-content: center; color: red; font-weight: bold;">Registro</h2>
-  
-  <!-- Creamos formulario de Registro -->
-  <form style="width: 100%;" [formGroup]="registerForm" (ngSubmit)="save()">
-    
-    <div style="margin-bottom: 15px; --background: white; --padding-start: 16px; --padding-end: 16px;">
+<ion-content [fullscreen]="true" style="
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    --background: #ffffff;
+    padding: 16px;
+  ">
+  <h2 style="
+      display: flex;
+      justify-content: center;
+      color: red;
+      font-weight: bold;
+    ">
+    Registro
+  </h2>
+
+  <!-- Creamos formulario de Registro, el (ngSubmit)="save()" activa la funcion save() -->
+  <form style="width: 100%" [formGroup]="registerForm" (ngSubmit)="save()">
+    <div style="
+        margin-bottom: 15px;
+        --background: white;
+        --padding-start: 16px;
+        --padding-end: 16px;
+      ">
       <!--ion-label e ion-input para Nombres: -->
-      <ion-label style="color: black;">Nombres:
-        <ion-note class="form--error-menssage">*
-          
-        </ion-note> 
+      <ion-label style="color: black">Nombres:
+        <ion-note class="form--error-menssage">
+          <span *ngIf="isNombresNull"> Los Nombres son Requeridos. *</span>
+        </ion-note>
       </ion-label>
       <ion-input 
-      style="
-        color: black; 
-        border: 1px solid black; 
-        border-radius: 10px; 
-        width: 100%; 
-        --padding-start: 10px;
-        --padding-end: 10px;
-        margin-top: 10px;"
+      [ngClass]="
+      {
+      'ionInputStyle': !isNombresNull,
+      'ionInputStyle-invalid': isNombresNull
+      }" 
       placeholder="Ej. Jose Jose" 
-      type="text"
+      type="text" 
       formControlName="nombres"></ion-input>
       <!--Utilizamos el formControlName="Nombres" para hacer binding del registerForm y su campo nombres['']-->
-      <br>
+      <br />
 
       <!--ion-label e ion-input para Apellidos: -->
-      <ion-label style="color: black;">Apellidos:
-        <ion-note class="form--error-menssage">*</ion-note>
+      <ion-label style="color: black">Apellidos:
+        <ion-note class="form--error-menssage">
+          <span *ngIf="isApellidosNull"> Los Apellidos son Requeridos. *</span>
+        </ion-note>
       </ion-label>
       <ion-input 
-      style="
-        color: black; 
-        border: 1px solid black; 
-        border-radius: 10px; 
-        width: 100%; 
-        --padding-start: 10px;
-        --padding-end: 10px;
-        margin-top: 10px;"
+      [ngClass]="
+      {
+        'ionInputStyle': !isApellidosNull,
+        'ionInputStyle-invalid': isApellidosNull
+      }"  
       placeholder="Ej. Aguilar Paz" 
       type="text"
       formControlName="apellidos"></ion-input>
-      <br>
+      <br />
 
       <!--ion-label e ion-input para Correo: -->
-      <ion-label style="color: black;">Correo: </ion-label>
-      <ion-note class="form--error-menssage"> 
+      <ion-label style="color: black">Correo: </ion-label>
+      <ion-note class="form--error-menssage">
         <span *ngIf="isEmailRequired"> El correo es Requerido *</span>
-        <span *ngIf="isEmailInvalid"> El correo electronico es invalido. *</span>
+        <span *ngIf="isEmailInvalid">
+          El correo electronico es invalido. *</span>
       </ion-note>
-      
+
       <ion-input 
-      style="
-        color: black; 
-        border: 1px solid black; 
-        border-radius: 10px; 
-        width: 100%; 
-        --padding-start: 10px;
-        --padding-end: 10px;
-        margin-top: 10px;"
-      placeholder="Ej. correo@gmail.com" 
-      type="email"
+      [ngClass]="
+      {
+        'ionInputStyle': !isEmailRequired && !isEmailInvalid,
+        'ionInputStyle-invalid': isEmailRequired || isEmailInvalid
+      }" 
+      placeholder="Ej. correo@gmail.com"
+       type="email"
       formControlName="email"></ion-input>
-      <br>
+      <br />
 
       <!--ion-label e ion-input para Contraseña: -->
-      <ion-label style="color: black;">Contraseña: </ion-label>
-      <ion-note *ngIf="isPasswordInvalid" class="form--error-menssage"> Debe ingresar una contraseña. *</ion-note>
-      <ion-input 
-      style="
-        color: black; 
-        border: 1px solid black; 
-        border-radius: 10px; 
-        width: 100%; 
-        --padding-start: 10px;
-        --padding-end: 10px;
-        margin-top: 10px;"
-      placeholder="Ej. correo@gmail.com" 
+      <ion-label style="color: black">Contraseña: </ion-label>
+      <ion-note *ngIf="isPasswordMinLengthInvalid" class="form--error-menssage">
+        Debe ingresar una Contraseña de 6 caracteres o mas. *</ion-note>
+      <ion-input [ngClass]="
+      {
+        'ionInputStyle': !isPasswordMinLengthInvalid,
+        'ionInputStyle-invalid': isPasswordMinLengthInvalid
+      }"  
+      placeholder="Ej. Password123" 
       type="text"
       formControlName="password"></ion-input>
-      
-      <br>
+
+      <br />
 
       <!--ion-label e ion-input para DNI: -->
-      <ion-label style="color: black;">DNI: 
-        <ion-note class="form--error-menssage">*</ion-note>
+      <ion-label style="color: black">DNI:
+        <ion-note class="form--error-menssage">
+          <ion-note *ngIf="isDniMinLengthInvalid" class="form--error-menssage">
+            El DNI es obligatorio y no puede ser menor de 13 digitos.
+            *</ion-note>
+          <ion-note *ngIf="isDniMaxLengthInvalid" class="form--error-menssage">
+            El DNI no puede ser mayor de 13 digitos. *</ion-note>
+          <ion-note *ngIf="isDniHasLettersOrSpaces" class="form--error-menssage">
+            El DNI no puede contener letras o espacios. *</ion-note>
+        </ion-note>
       </ion-label>
-      <ion-input 
-      style="
-        color: black; 
-        border: 1px solid black; 
-        border-radius: 10px; 
-        width: 100%; 
-        --padding-start: 10px;
-        --padding-end: 10px;
-        margin-top: 10px;"
-      placeholder="Ej. correo@gmail.com" 
-      
-      formControlName="dni"
-      ></ion-input>
-      
-      <br>
+      <ion-input [ngClass]="
+      {
+        'ionInputStyle': !isDniMinLengthInvalid && !isDniMaxLengthInvalid && !isDniHasLettersOrSpaces,
+        'ionInputStyle-invalid': isDniMinLengthInvalid || isDniMaxLengthInvalid || isDniHasLettersOrSpaces
+      }"  
+      placeholder="Ej. 0801200012345" 
+      formControlName="dni"></ion-input>
+
+      <br />
 
       <!--ion-label e ion-input para Telefono: -->
-      <ion-label style="color: black;">Telefono: 
-        <ion-note class="form--error-menssage">*</ion-note>
+      <ion-label style="color: black">Telefono:
+        <ion-note class="form--error-menssage">
+          <ion-note *ngIf="isTelefonoInvalid || isTelefonoIMinInvalid" class="form--error-menssage">
+            El Telefono es obligatorio y no puede ser menor de 8 digitos.
+            *</ion-note>
+        </ion-note>
       </ion-label>
-      <ion-input 
-      style="
-        color: black; 
-        border: 1px solid black; 
-        border-radius: 10px; 
-        width: 100%; 
-        --padding-start: 10px;
-        --padding-end: 10px;
-        margin-top: 10px;"
-      placeholder="Ej. correo@gmail.com" 
+      <ion-input [ngClass]="
+      {
+        'ionInputStyle': !isTelefonoInvalid && !isTelefonoIMinInvalid,
+        'ionInputStyle-invalid': isTelefonoInvalid || isTelefonoIMinInvalid
+      }"  
+      placeholder="Ej. 97868399" 
       type="tel"
       formControlName="telefono"></ion-input>
-      
-      <br>
+
+      <br />
 
       <!-- ion-button y ion-spinner para registrar usuario -->
-      <div style="display: flex; justify-content: center; margin-top: 20px;">
+      <div style="display: flex; justify-content: center; margin-top: 20px">
         <ion-button type="submit" color="success" [disabled]="isFormInvalid">
           <!--*ngIf activara la animacion cuando spinner sea true-->
-          <ion-spinner *ngIf="spinner" style="margin-right: 10px;"></ion-spinner> Registrar
+          <ion-spinner *ngIf="spinner" style="margin-right: 10px"></ion-spinner>
+          Registrar
         </ion-button>
       </div>
-
     </div>
-
   </form>
 </ion-content>
-
