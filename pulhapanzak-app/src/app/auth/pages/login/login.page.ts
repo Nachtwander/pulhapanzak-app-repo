@@ -1,6 +1,9 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { loginDto } from '../../models/login.dto';
+import { addIcons } from 'ionicons';
+import { atCircleOutline, lockOpenOutline } from 'ionicons/icons';
+
 import {
   FormsModule,
   FormBuilder,
@@ -19,8 +22,7 @@ import {
   IonLabel,
   IonButton,
   IonSpinner,
-  IonNote,
-} from '@ionic/angular/standalone';
+  IonNote, IonIcon } from '@ionic/angular/standalone';
 
 
 @Component({
@@ -28,7 +30,7 @@ import {
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
   standalone: true,
-  imports: [
+  imports: [IonIcon, 
     IonContent,
     IonHeader,
     IonTitle,
@@ -42,6 +44,7 @@ import {
     IonSpinner,
     ReactiveFormsModule, //importamos para poder hacer el Binding <form [formGroup]="registerForm">
     IonNote,
+    IonIcon,
   ],
   styles: [
     `
@@ -70,35 +73,18 @@ import {
     `,
   ],
 })
-export class LoginPage implements OnInit {
+export class LoginPage {
 
- /*
-  "Estamos creando una propiedad privada llamada formBuilder que es del tipo FormBuilder, y la estamos inicializando 
-  usando la función inject para obtener una instancia de FormBuilder."
-  Esto significa que formBuilder será una instancia de FormBuilder, obtenida a través de la inyección de dependencias, 
-  lo que permite que la clase que contiene esta línea pueda usar formBuilder para construir 
-  formularios reactivos o realizar otras operaciones relacionadas con formularios en Angular.
-  */
+
   private formBuilder: FormBuilder = inject(FormBuilder);
 
-  //variable que implementa la interfaz registerDTO
+  //variable que implementa la interfaz loginDTO
   loginDTO: loginDto = {} as loginDto;
 
   //variable para controlar si se muestra la animacion de circulo de carga en el boton Registrar
   spinner: boolean = false;
 
-  /*
-  "Estamos creando una propiedad llamada registerForm, que es del tipo FormGroup. Inicialmente, 
-  la estamos configurando como un grupo vacío utilizando el método group del formBuilder." 
-  En términos más simples:
-  -> registerForm es una variable que almacenará un formulario.
-  -> FormGroup es el tipo de esta variable, indicando que es un grupo de controles de formulario.
-  -> this.formBuilder.group({}) es el método que usamos para crear un grupo de controles de formulario. 
-     En este caso, estamos creando un formulario reactivo llamado registerForm, que es un FormGroup 
-     con varios campos: nombres, apellidos, email, password, dni y telefono. 
-     Cada uno de estos campos se inicializa con un valor vacío, lo que significa que están listos para ser llenados
-      por el usuario."
-  */
+ 
   loginForm: FormGroup = this.formBuilder.group({
     
     email: ['', [Validators.required, Validators.email]],
@@ -143,7 +129,11 @@ export class LoginPage implements OnInit {
     }, 10000);
   }
 
-  ngOnInit() {
+  constructor(){
+    addIcons({
+      'at-circle-outline': atCircleOutline,
+      'lock-open-outline': lockOpenOutline,
+    })
   }
-
+ 
 }

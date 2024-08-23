@@ -1,6 +1,6 @@
 <ion-header [translucent]="true">
   <ion-toolbar style="--background: red">
-    <ion-title>auth/pages/register/register.page</ion-title>
+    <ion-title></ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -34,11 +34,13 @@ components - models - pages - services
         --padding-end: 16px;
       ">
       <!--ion-label e ion-input para Nombres: -->
-      <ion-label style="color: black">Nombres:
+      <div>
+        <ion-icon name="person-outline" style="color: black; font-size: 24px; margin-bottom: -5px;"></ion-icon>
+        <span class="label-text" style="color: black;">Nombres:</span>
         <ion-note class="form--error-menssage">
           <span *ngIf="isNombresNull"> Los Nombres son Requeridos. *</span>
         </ion-note>
-      </ion-label>
+      </div>
       <ion-input 
       [ngClass]="
       {
@@ -52,11 +54,13 @@ components - models - pages - services
       <br />
 
       <!--ion-label e ion-input para Apellidos: -->
-      <ion-label style="color: black">Apellidos:
+      <div>
+        <ion-icon name="person-outline" style="color: black; font-size: 24px; margin-bottom: -5px;"></ion-icon>
+        <span class="label-text" style="color: black;">Apellidos:</span>
         <ion-note class="form--error-menssage">
           <span *ngIf="isApellidosNull"> Los Apellidos son Requeridos. *</span>
         </ion-note>
-      </ion-label>
+      </div>
       <ion-input 
       [ngClass]="
       {
@@ -69,13 +73,15 @@ components - models - pages - services
       <br />
 
       <!--ion-label e ion-input para Correo: -->
-      <ion-label style="color: black">Correo: </ion-label>
-      <ion-note class="form--error-menssage">
-        <span *ngIf="isEmailRequired"> El correo es Requerido *</span>
-        <span *ngIf="isEmailInvalid">
-          El correo electronico es invalido. *</span>
-      </ion-note>
-
+      <div class="icon-text-container">
+        <ion-icon name="at-circle-outline" style="color: black; font-size: 24px; margin-bottom: -5px;"></ion-icon>
+        <span class="label-text" style="color: black;">Correo:</span>
+        <ion-note class="form--error-menssage">
+          <span *ngIf="isEmailRequired"> El correo es Requerido *</span>
+          <span *ngIf="isEmailInvalid">
+            El correo electronico es invalido. *</span>
+        </ion-note>
+      </div>
       <ion-input 
       [ngClass]="
       {
@@ -88,9 +94,12 @@ components - models - pages - services
       <br />
 
       <!--ion-label e ion-input para Contraseña: -->
-      <ion-label style="color: black">Contraseña: </ion-label>
-      <ion-note *ngIf="isPasswordMinLengthInvalid" class="form--error-menssage">
-        Debe ingresar una Contraseña de 6 caracteres o mas. *</ion-note>
+      <div>
+        <ion-icon name="lock-open-outline" style="color: black; font-size: 24px; margin-bottom: -5px;"></ion-icon>
+        <span class="label-text" style="color: black;">Contraseña:</span>
+        <ion-note *ngIf="isPasswordMinLengthInvalid" class="form--error-menssage">
+          Debe ingresar una Contraseña de 6 caracteres o mas. *</ion-note>
+      </div>
       <ion-input [ngClass]="
       {
         'ionInputStyle': !isPasswordMinLengthInvalid,
@@ -99,11 +108,12 @@ components - models - pages - services
       placeholder="Ej. Password123" 
       type="text"
       formControlName="password"></ion-input>
-
       <br />
 
       <!--ion-label e ion-input para DNI: -->
-      <ion-label style="color: black">DNI:
+      <div>
+        <ion-icon name="id-card-outline" style="color: black; font-size: 24px; margin-bottom: -5px;"></ion-icon>
+        <span class="label-text" style="color: black;">DNI:</span>
         <ion-note class="form--error-menssage">
           <ion-note *ngIf="isDniMinLengthInvalid" class="form--error-menssage">
             El DNI es obligatorio y no puede ser menor de 13 digitos.
@@ -113,7 +123,7 @@ components - models - pages - services
           <ion-note *ngIf="isDniHasLettersOrSpaces" class="form--error-menssage">
             El DNI no puede contener letras o espacios. *</ion-note>
         </ion-note>
-      </ion-label>
+      </div>
       <ion-input [ngClass]="
       {
         'ionInputStyle': !isDniMinLengthInvalid && !isDniMaxLengthInvalid && !isDniHasLettersOrSpaces,
@@ -125,13 +135,15 @@ components - models - pages - services
       <br />
 
       <!--ion-label e ion-input para Telefono: -->
-      <ion-label style="color: black">Telefono:
+      <div>
+        <ion-icon name="call-outline" style="color: black; font-size: 24px; margin-bottom: -5px;"></ion-icon>
+        <span class="label-text" style="color: black;">Telefono:</span>
         <ion-note class="form--error-menssage">
           <ion-note *ngIf="isTelefonoInvalid || isTelefonoIMinInvalid" class="form--error-menssage">
             El Telefono es obligatorio y no puede ser menor de 8 digitos.
             *</ion-note>
         </ion-note>
-      </ion-label>
+      </div>
       <ion-input [ngClass]="
       {
         'ionInputStyle': !isTelefonoInvalid && !isTelefonoIMinInvalid,

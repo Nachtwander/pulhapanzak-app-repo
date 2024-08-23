@@ -1,6 +1,8 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { registerDto } from '../../models/register.dto';
+import { addIcons } from 'ionicons';
+import { atCircleOutline, lockOpenOutline, personOutline, idCardOutline, callOutline } from 'ionicons/icons';
 import {
   FormsModule,
   FormBuilder,
@@ -20,6 +22,7 @@ import {
   IonButton,
   IonSpinner,
   IonNote,
+  IonIcon,
 } from '@ionic/angular/standalone';
 
 @Component({
@@ -41,6 +44,7 @@ import {
     IonSpinner,
     ReactiveFormsModule, //importamos para poder hacer el Binding <form [formGroup]="registerForm">
     IonNote,
+    IonIcon,
   ],
   styles: [
     `
@@ -69,7 +73,7 @@ import {
     `,
   ],
 })
-export class RegisterPage implements OnInit {
+export class RegisterPage{
   /*
   "Estamos creando una propiedad privada llamada formBuilder que es del tipo FormBuilder, y la estamos inicializando 
   usando la función inject para obtener una instancia de FormBuilder."
@@ -221,6 +225,14 @@ export class RegisterPage implements OnInit {
     }, 10000);
   }
 
-  // REVISAR REPETICION EN TIEMPO 01:19:00
-  ngOnInit() {}
+  constructor(){
+    addIcons({
+      'at-circle-outline': atCircleOutline,
+      'lock-open-outline': lockOpenOutline,
+      'person-outline': personOutline,
+      'id-card-outline': idCardOutline,
+      'call-outline': callOutline,
+    })
+  
+  }
 }
