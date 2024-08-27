@@ -23,6 +23,7 @@ import {
   IonSpinner,
   IonNote,
   IonIcon,
+  IonInputPasswordToggle
 } from '@ionic/angular/standalone';
 
 @Component({
@@ -45,6 +46,7 @@ import {
     ReactiveFormsModule, //importamos para poder hacer el Binding <form [formGroup]="registerForm">
     IonNote,
     IonIcon,
+    IonInputPasswordToggle,
   ],
   styles: [
     `

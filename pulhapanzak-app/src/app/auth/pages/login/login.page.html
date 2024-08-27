@@ -23,7 +23,7 @@
     </h2>
 
     <!-- Creamos formulario de Registro, el (ngSubmit)="save()" activa la funcion save() -->
-    <form style="width: 100%" [formGroup]="loginForm" (ngSubmit)="save()">
+    <form style="width: 100%" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
       <div style="
         margin-bottom: 15px;
         --background: white;
@@ -66,7 +66,7 @@
 
         <!-- ion-button y ion-spinner para log ear usuario -->
         <div style="display: flex; justify-content: center; margin-top: 20px">
-          <ion-button type="submit" color="success" [disabled]="isFormInvalid" ngSumm>
+          <ion-button type="submit" color="success" [disabled]="isFormInvalid || disabled" ngSumm>
             <!--*ngIf activara la animacion cuando spinner sea true-->
             <ion-spinner *ngIf="spinner" style="margin-right: 10px"></ion-spinner>
             Login

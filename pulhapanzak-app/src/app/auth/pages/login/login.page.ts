@@ -3,7 +3,9 @@ import { CommonModule } from '@angular/common';
 import { loginDto } from '../../models/login.dto';
 import { addIcons } from 'ionicons';
 import { atCircleOutline, lockOpenOutline } from 'ionicons/icons';
-
+import { AuthService } from '../../services/auth/auth.service';
+//se importa Router que se utiliza para navegar entre paginas en la aplicacion
+import { Router } from '@angular/router';
 import {
   FormsModule,
   FormBuilder,
@@ -12,6 +14,7 @@ import {
   Validators,
   AbstractControl,
 } from '@angular/forms';
+
 import {
   IonContent,
   IonHeader,
@@ -22,15 +25,18 @@ import {
   IonLabel,
   IonButton,
   IonSpinner,
-  IonNote, IonIcon } from '@ionic/angular/standalone';
-
+  IonNote,
+  IonIcon,
+  ToastController,
+} from '@ionic/angular/standalone';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
   standalone: true,
-  imports: [IonIcon, 
+  imports: [
+    IonIcon,
     IonContent,
     IonHeader,
     IonTitle,
@@ -69,33 +75,38 @@ import {
         --padding-end: 10px;
         margin-top: 10px;
       }
-
     `,
   ],
 })
 export class LoginPage {
-
-
+  //creamos variable que sera del tipo del servicio AuthService (services\auth) para autenticar al usuario
+  private _authService: AuthService = inject(AuthService);
+  //se usa para navegar entre paginas
+  private _router: Router = inject(Router);
   private formBuilder: FormBuilder = inject(FormBuilder);
-
-  //variable que implementa la interfaz loginDTO
-  loginDTO: loginDto = {} as loginDto;
-
+  //variable para utilizar toast alert
+  private _toastController: ToastController = inject(ToastController);
   //variable para controlar si se muestra la animacion de circulo de carga en el boton Registrar
   spinner: boolean = false;
 
- 
+  disabled: boolean = false;
+
   loginForm: FormGroup = this.formBuilder.group({
-    
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required, Validators.minLength(6)]],
   });
+
+  constructor() {
+    addIcons({
+      'at-circle-outline': atCircleOutline,
+      'lock-open-outline': lockOpenOutline,
+    });
+  }
 
   //get para verificar si el formulario es invalido y si es true desativa el boton con [disabled]
   get isFormInvalid(): boolean {
     return this.loginForm.invalid;
   }
-
 
   //get que verifica que el campo correo no sea nulo, si el usuario no ingresa un correo valido
   get isEmailRequired(): boolean {
@@ -120,20 +131,51 @@ export class LoginPage {
     return false;
   }
 
-  //funcion save del ngSubmit del form
-  save(): void {
-    this.spinner = true;
-    setTimeout(() => {
-      this.loginForm.reset();
-      this.spinner = false;
-    }, 10000);
+  //funcion onSubmit del ngSubmit del form
+  onSubmit(): void {
+    if (!this.isFormInvalid) {
+      //para deshabilitar el boton y no puedan darle clic 2 veces al login
+      this.disabled = true;
+      //para activar la animacion del spinner
+      this.spinner = true;
+      //que parsee informacion de la variable que implementa loginDto a la de loginform como loginDTO
+      const login: loginDto = this.loginForm.value as loginDto;
+
+      //logica de lo que hara cuando se presione el boton de login
+      this._authService
+        .login(login)
+        .then(async (user) => {
+          this.spinner = false;
+          this.disabled = false;
+          console.log(user);
+          //mostrara una alerta cuando se ingrese con exito
+          await this.showAlert('Ingreso con exito');
+          this._router.navigate(['/home']);
+          this.resetForm();
+        })
+        .catch(async () => {
+          this.spinner = false;
+          this.disabled = false;
+          //si hay un error mostrara una alerta indicando error
+          await this.showAlert(
+            'Correo o Contraseña Invalido, intente de nuevo',
+            true
+          );
+        });
+    }
   }
 
-  constructor(){
-    addIcons({
-      'at-circle-outline': atCircleOutline,
-      'lock-open-outline': lockOpenOutline,
-    })
+  resetForm(): void {
+    this.loginForm.reset();
   }
- 
+
+  async showAlert(message: string, isError: boolean = false): Promise<void> {
+    const toast = await this._toastController.create({
+      //recibe el texto desde onSubmit().
+      message: message,
+      duration: 2000,
+      color: isError ? 'danger' : 'success',
+    });
+    toast.present();
+  }
 }
