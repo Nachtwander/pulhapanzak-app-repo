@@ -8,4 +8,5 @@ export interface registerDto {
   password: string;
   dni: string;
   telefono: string;
+  uid:string;
 }

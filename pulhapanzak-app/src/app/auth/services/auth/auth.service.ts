@@ -1,4 +1,6 @@
 import { inject, Injectable } from '@angular/core';
+import { loginDto } from '../../models/login.dto';
+import { registerDto } from '../../models/register.dto';
 // importamos lo necesario para la autenticacion
 import {
   Auth,
@@ -6,9 +8,15 @@ import {
   UserCredential,
   createUserWithEmailAndPassword,
 } from '@angular/fire/auth';
-import { loginDto } from '../../models/login.dto';
-import { registerDto } from '../../models/register.dto';
-import { CollectionReference, Firestore, collection } from '@angular/fire/firestore';
+
+import {
+  CollectionReference,
+  Firestore,
+  collection,
+  DocumentReference,
+  doc,
+  setDoc,
+} from '@angular/fire/firestore';
 
 const PATH: string = 'users';
 
@@ -19,17 +27,18 @@ export class AuthService {
   //creamos variable _auth de tipo Auth donde se le injecto Auth de angular fire para autentificar usuario.
   private _auth: Auth = inject(Auth);
 
-  //inyectamos clase firestore 
+  //inyectamos clase firestore para usar cuando registremos usuarios
   private _firestore: Firestore = inject(Firestore);
 
-  // creamos coleccion de usuarios
-  private _collection: CollectionReference = collection(this._firestore, PATH)
+  // creamos coleccion de usuarios de firestore, PATH es un string de usuarios
+  private _collection: CollectionReference = collection(this._firestore, PATH);
 
   constructor() {}
 
-  //ver grabamcion en 01:01:00
+  //ver grabacion en 01:01:00
   async createUserInfirestore(user: registerDto): Promise<void> {
-
+    const docRef: DocumentReference = doc(this._collection, user.uid);
+    await setDoc(docRef, user);
   }
 
   //metodo asincronico de login que utiliza la interface de loginDTO que es del tipo promesa
@@ -47,7 +56,7 @@ export class AuthService {
     return await createUserWithEmailAndPassword(
       this._auth,
       model.email,
-      model.password,
+      model.password
     );
   }
 
