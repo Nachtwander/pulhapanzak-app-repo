@@ -1,12 +1,15 @@
 import { inject, Injectable } from '@angular/core';
 import { loginDto } from '../../models/login.dto';
 import { registerDto } from '../../models/register.dto';
+import { passwordResetDto } from '../../models/passwordReset.dto';
 // importamos lo necesario para la autenticacion
 import {
   Auth,
   signInWithEmailAndPassword,
   UserCredential,
   createUserWithEmailAndPassword,
+  sendPasswordResetEmail,
+  
 } from '@angular/fire/auth';
 
 import {
@@ -54,8 +57,8 @@ export class AuthService {
   async login(model: loginDto): Promise<UserCredential> {
     return await signInWithEmailAndPassword(
       this._auth,
-      model.email,
-      model.password
+      model.correo,
+      model.contraseña
     );
   }
 
@@ -72,4 +75,13 @@ export class AuthService {
   async singOut(): Promise<void> {
     return await this._auth.signOut();
   }
+
+  async resetPassword(model: passwordResetDto):Promise <void> {
+    return await sendPasswordResetEmail(
+      this._auth,
+      model.correo
+    )
+  }
+
 }
+

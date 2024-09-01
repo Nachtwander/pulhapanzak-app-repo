@@ -170,6 +170,11 @@ export class LoginPage {
     this._router.navigate(['/register']);
   }
 
+  goToRForgotPassword(){
+    this.resetForm();
+    this._router.navigate(['/forgot-password']);
+  }
+
   resetForm(): void {
     this.loginForm.reset();
   }
