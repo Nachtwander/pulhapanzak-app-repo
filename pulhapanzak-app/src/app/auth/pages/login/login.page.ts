@@ -28,6 +28,7 @@ import {
   IonNote,
   IonIcon,
   ToastController,
+  IonInputPasswordToggle,
 } from '@ionic/angular/standalone';
 
 @Component({
@@ -51,6 +52,7 @@ import {
     ReactiveFormsModule, //importamos para poder hacer el Binding <form [formGroup]="registerForm">
     IonNote,
     IonIcon,
+    IonInputPasswordToggle,
   ],
   styles: [
     `
@@ -92,8 +94,8 @@ export class LoginPage {
   disabled: boolean = false;
 
   loginForm: FormGroup = this.formBuilder.group({
-    email: ['', [Validators.required, Validators.email]],
-    password: ['', [Validators.required, Validators.minLength(6)]],
+    correo: ['', [Validators.required, Validators.email]],
+    contraseña: ['', [Validators.required, Validators.minLength(6)]],
   });
 
   constructor() {
@@ -110,13 +112,13 @@ export class LoginPage {
 
   //get que verifica que el campo correo no sea nulo, si el usuario no ingresa un correo valido
   get isEmailRequired(): boolean {
-    const control: AbstractControl | null = this.loginForm.get('email');
+    const control: AbstractControl | null = this.loginForm.get('correo');
     return control ? control.hasError('required') && control.touched : false;
   }
 
   //get para verificar que el email sea valido
   get isEmailInvalid(): boolean {
-    const control: AbstractControl | null = this.loginForm.get('email');
+    const control: AbstractControl | null = this.loginForm.get('correo');
     return control ? control.hasError('email') && control.touched : false;
   }
 
@@ -124,7 +126,7 @@ export class LoginPage {
   // y toca sin ingresar datos se mostrara el ion-note *
   //get para que password no sea menor de 6 caracteres
   get isPasswordMinLengthInvalid(): boolean {
-    const control: AbstractControl | null = this.loginForm.get('password');
+    const control: AbstractControl | null = this.loginForm.get('contraseña');
     if (control && control.touched) {
       return control.hasError('minlength') || control.value.length < 6;
     }

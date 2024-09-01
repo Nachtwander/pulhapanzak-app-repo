@@ -40,7 +40,7 @@
           'ionInputStyle': !isEmailRequired && !isEmailInvalid,
           'ionInputStyle-invalid': isEmailRequired || isEmailInvalid
         }" 
-        placeholder="Ej. correo@gmail.com" type="email" formControlName="email"></ion-input>
+        placeholder="Ej. correo@gmail.com" type="email" formControlName="correo"></ion-input>
         <ion-note class="form--error-menssage">
           <span *ngIf="isEmailRequired"> El correo es Requerido *</span>
           <span *ngIf="isEmailInvalid">
@@ -58,7 +58,8 @@
           'ionInputStyle': !isPasswordMinLengthInvalid,
           'ionInputStyle-invalid': isPasswordMinLengthInvalid
         }" 
-        placeholder="Ej. Password123" type="text" formControlName="password"></ion-input>
+        placeholder="Ej. Password123" type="password" formControlName="contraseña">
+        <ion-input-password-toggle slot="end"></ion-input-password-toggle></ion-input>
         <ion-note *ngIf="isPasswordMinLengthInvalid" class="form--error-menssage">
           Debe ingresar una Contraseña de 6 caracteres o mas. *</ion-note>
 
@@ -74,6 +75,7 @@
         </div>
       </div>
     </form>
+
     <div [ngClass]="'center-container'">
       <span [ngClass]="'spanRedirect'" (click)="goToRForgotPassword()"> ¿Olvidaste tu contraseña? </span>
     </div>
@@ -82,5 +84,6 @@
       <span [ngClass]="'span'">¿No tienes cuenta?</span>
       <span [ngClass]="'spanRedirect'" (click)="goToRegister()"> Registrate ahora</span>
     </div>
+
   </ion-content>
 </ion-content>
