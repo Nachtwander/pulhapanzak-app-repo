@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { registerDto } from '../../models/register.dto';
 import { addIcons } from 'ionicons';
 import { atCircleOutline, lockOpenOutline, personOutline, idCardOutline, callOutline } from 'ionicons/icons';
+import { AuthService } from '../../services/auth/auth.service';
+import { Router } from '@angular/router';
 import {
   FormsModule,
   FormBuilder,
@@ -23,7 +25,8 @@ import {
   IonSpinner,
   IonNote,
   IonIcon,
-  IonInputPasswordToggle
+  IonInputPasswordToggle,
+  ToastController
 } from '@ionic/angular/standalone';
 
 @Component({
@@ -47,6 +50,7 @@ import {
     IonNote,
     IonIcon,
     IonInputPasswordToggle,
+    
   ],
   styles: [
     `
@@ -91,6 +95,17 @@ export class RegisterPage{
   //variable para controlar si se muestra la animacion de circulo de carga en el boton Registrar
   spinner: boolean = false;
 
+  //creamos variable que sera del tipo del servicio AuthService (services\auth) para autenticar al usuario
+  private _authService: AuthService = inject(AuthService);
+  //se usa para navegar entre paginas
+  private _router: Router = inject(Router);
+
+  //variable para utilizar toast alert
+  private _toastController: ToastController = inject(ToastController);
+
+
+  disabled: boolean = false;
+
   /*
   "Estamos creando una propiedad llamada registerForm, que es del tipo FormGroup. Inicialmente, 
   la estamos configurando como un grupo vacío utilizando el método group del formBuilder." 
@@ -106,8 +121,8 @@ export class RegisterPage{
   registerForm: FormGroup = this.formBuilder.group({
     nombres: ['', [Validators.required]],
     apellidos: ['', [Validators.required]],
-    email: ['', [Validators.required, Validators.email]],
-    password: ['', [Validators.required, Validators.minLength(6)]],
+    correo: ['', [Validators.required, Validators.email]],
+    contraseña: ['', [Validators.required, Validators.minLength(6)]],
     dni: [
       '',
       [
@@ -146,13 +161,13 @@ export class RegisterPage{
 
   //get que verifica que el campo correo no sea nulo, si el usuario no ingresa un correo valido
   get isEmailRequired(): boolean {
-    const control: AbstractControl | null = this.registerForm.get('email');
+    const control: AbstractControl | null = this.registerForm.get('correo');
     return control ? control.hasError('required') && control.touched : false;
   }
 
   //get para verificar que el email sea valido
   get isEmailInvalid(): boolean {
-    const control: AbstractControl | null = this.registerForm.get('email');
+    const control: AbstractControl | null = this.registerForm.get('correo');
     return control ? control.hasError('email') && control.touched : false;
   }
 
@@ -160,7 +175,7 @@ export class RegisterPage{
   // y toca sin ingresar datos se mostrara el ion-note *
   //get para que password no sea menor de 6 caracteres
   get isPasswordMinLengthInvalid(): boolean {
-    const control: AbstractControl | null = this.registerForm.get('password');
+    const control: AbstractControl | null = this.registerForm.get('contraseña');
     if (control && control.touched) {
       return control.hasError('minlength') || control.value.length < 6;
     }
@@ -216,16 +231,60 @@ export class RegisterPage{
     return false;
   }
 
-  //funcion save del ngSubmit del form
-  save(): void {
-    this.registerDTO = this.registerForm.value as registerDto;
-    console.log('registro =>', this.registerDTO);
-    this.spinner = true;
-    setTimeout(() => {
-      this.registerForm.reset();
-      this.spinner = false;
-    }, 10000);
+  //summit del formulario
+  onSubmit(): void {
+    if (!this.isFormInvalid) {
+      //para deshabilitar el boton y no puedan darle clic 2 veces al login
+      this.disabled = true;
+      //para activar la animacion del spinner
+      this.spinner = true;
+      //declaramos la variable newUser que seria ugual a los valores del formulario de registo y se parsearan al tipo registerDto
+      let newUser: registerDto = this.registerForm.value as registerDto;
+
+      this._authService.singUp(newUser).then(async (result) => {
+        newUser.uid = result.user.uid;
+        await this._authService.createUserInfirestore(newUser).then (async () =>{
+          this.spinner = false;
+          this.disabled = false;
+          console.log(result);
+          //mostrara una alerta cuando se ingrese con exito
+          await this.showAlert('Usuario registrado con exito');
+          this._router.navigate(['/home']);
+          this.resetForm();
+        });
+
+      }).catch(async () => {
+        this.spinner = false;
+        this.disabled = false;
+        //si hay un error mostrara una alerta indicando error
+        await this.showAlert(
+          'Ocurrio un error, revise los campos e intentelo de nuevo',
+          true
+        );
+      });
+        
+    }
   }
+
+  resetForm(): void {
+    this.registerForm.reset();
+  }
+
+  async showAlert(message: string, isError: boolean = false): Promise<void> {
+    const toast = await this._toastController.create({
+      //recibe el texto desde onSubmit().
+      message: message,
+      duration: 2000,
+      color: isError ? 'danger' : 'success',
+    });
+    toast.present();
+  }
+
+  goToLogin(){
+    this.resetForm();
+    this._router.navigate(['/login']);
+  }
+
 
   constructor(){
     addIcons({
@@ -238,3 +297,6 @@ export class RegisterPage{
   
   }
 }
+
+  
+

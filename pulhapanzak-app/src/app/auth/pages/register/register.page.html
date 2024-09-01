@@ -26,7 +26,7 @@ components - models - pages - services
   </h2>
 
   <!-- Creamos formulario de Registro, el (ngSubmit)="save()" activa la funcion save() -->
-  <form style="width: 100%" [formGroup]="registerForm" (ngSubmit)="save()">
+  <form style="width: 100%" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
     <div style="
         margin-bottom: 15px;
         --background: white;
@@ -90,7 +90,7 @@ components - models - pages - services
       }" 
       placeholder="Ej. correo@gmail.com"
        type="email"
-      formControlName="email"></ion-input>
+      formControlName="correo"></ion-input>
       <br />
 
       <!--ion-label e ion-input para Contraseña: -->
@@ -106,8 +106,8 @@ components - models - pages - services
         'ionInputStyle-invalid': isPasswordMinLengthInvalid
       }"  
       placeholder="Ej. Password123" 
-      type="text"
-      formControlName="password">
+      type="password"
+      formControlName="contraseña">
       <ion-input-password-toggle slot="end"></ion-input-password-toggle></ion-input>
       <br />
 
@@ -166,4 +166,9 @@ components - models - pages - services
       </div>
     </div>
   </form>
+
+  <div [ngClass]="'center-container'">
+    <span [ngClass]="'span'">¿Ya tienes una cuenta?</span>
+    <span [ngClass]="'spanRedirect'" (click)="goToLogin()"> Iniciar Sesión</span>
+  </div>
 </ion-content>

@@ -30,15 +30,23 @@ export class AuthService {
   //inyectamos clase firestore para usar cuando registremos usuarios
   private _firestore: Firestore = inject(Firestore);
 
-  // creamos coleccion de usuarios de firestore, PATH es un string de usuarios
+  // creamos coleccion y le mandamos como parametros firestore y un string de con el nombre de la coleccion
   private _collection: CollectionReference = collection(this._firestore, PATH);
 
   constructor() {}
 
-  //ver grabacion en 01:01:00
+  //metodo asincronico de creacion de usuarios
   async createUserInfirestore(user: registerDto): Promise<void> {
+    //variable docRef que es un documento de referencia que recibe la informacion de usuarios
     const docRef: DocumentReference = doc(this._collection, user.uid);
-    await setDoc(docRef, user);
+    //agregamos metodo setDoc para guardar la informacion de este usuario
+    await setDoc(docRef, {
+      nombres: user.nombres,
+      apellidos: user.apellidos,
+      correo: user.correo,
+      dni: user.dni,
+      telefono: user.telefono
+    });
   }
 
   //metodo asincronico de login que utiliza la interface de loginDTO que es del tipo promesa
@@ -55,8 +63,8 @@ export class AuthService {
   async singUp(model: registerDto): Promise<UserCredential> {
     return await createUserWithEmailAndPassword(
       this._auth,
-      model.email,
-      model.password
+      model.correo,
+      model.contraseña
     );
   }
 

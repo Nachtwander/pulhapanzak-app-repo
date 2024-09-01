@@ -74,5 +74,10 @@
         </div>
       </div>
     </form>
+
+    <div [ngClass]="'center-container'">
+      <span [ngClass]="'span'">¿No tienes cuenta?</span>
+      <span [ngClass]="'spanRedirect'" (click)="goToRegister()"> Registrate ahora</span>
+    </div>
   </ion-content>
 </ion-content>

@@ -165,6 +165,11 @@ export class LoginPage {
     }
   }
 
+  goToRegister(){
+    this.resetForm();
+    this._router.navigate(['/register']);
+  }
+
   resetForm(): void {
     this.loginForm.reset();
   }
