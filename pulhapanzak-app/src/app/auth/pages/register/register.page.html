@@ -41,15 +41,11 @@ components - models - pages - services
           <span *ngIf="isNombresNull"> Los Nombres son Requeridos. *</span>
         </ion-note>
       </div>
-      <ion-input 
-      [ngClass]="
+      <ion-input [ngClass]="
       {
       'ionInputStyle': !isNombresNull,
       'ionInputStyle-invalid': isNombresNull
-      }" 
-      placeholder="Ej. Jose Jose" 
-      type="text" 
-      formControlName="nombres"></ion-input>
+      }" placeholder="Ej. Jose Jose" type="text" formControlName="nombres"></ion-input>
       <!--Utilizamos el formControlName="Nombres" para hacer binding del registerForm y su campo nombres['']-->
       <br />
 
@@ -61,15 +57,11 @@ components - models - pages - services
           <span *ngIf="isApellidosNull"> Los Apellidos son Requeridos. *</span>
         </ion-note>
       </div>
-      <ion-input 
-      [ngClass]="
+      <ion-input [ngClass]="
       {
         'ionInputStyle': !isApellidosNull,
         'ionInputStyle-invalid': isApellidosNull
-      }"  
-      placeholder="Ej. Aguilar Paz" 
-      type="text"
-      formControlName="apellidos"></ion-input>
+      }" placeholder="Ej. Aguilar Paz" type="text" formControlName="apellidos"></ion-input>
       <br />
 
       <!--ion-label e ion-input para Correo: -->
@@ -82,15 +74,11 @@ components - models - pages - services
             El correo electronico es invalido. *</span>
         </ion-note>
       </div>
-      <ion-input 
-      [ngClass]="
+      <ion-input [ngClass]="
       {
         'ionInputStyle': !isEmailRequired && !isEmailInvalid,
         'ionInputStyle-invalid': isEmailRequired || isEmailInvalid
-      }" 
-      placeholder="Ej. correo@gmail.com"
-       type="email"
-      formControlName="correo"></ion-input>
+      }" placeholder="Ej. correo@gmail.com" type="email" formControlName="correo"></ion-input>
       <br />
 
       <!--ion-label e ion-input para Contraseña: -->
@@ -104,11 +92,8 @@ components - models - pages - services
       {
         'ionInputStyle': !isPasswordMinLengthInvalid,
         'ionInputStyle-invalid': isPasswordMinLengthInvalid
-      }"  
-      placeholder="Ej. Password123" 
-      type="password"
-      formControlName="contraseña">
-      <ion-input-password-toggle slot="end"></ion-input-password-toggle></ion-input>
+      }" placeholder="Ej. Password123" type="password" formControlName="contraseña">
+        <ion-input-password-toggle slot="end"></ion-input-password-toggle></ion-input>
       <br />
 
       <!--ion-label e ion-input para DNI: -->
@@ -129,9 +114,7 @@ components - models - pages - services
       {
         'ionInputStyle': !isDniMinLengthInvalid && !isDniMaxLengthInvalid && !isDniHasLettersOrSpaces,
         'ionInputStyle-invalid': isDniMinLengthInvalid || isDniMaxLengthInvalid || isDniHasLettersOrSpaces
-      }"  
-      placeholder="Ej. 0801200012345" 
-      formControlName="dni"></ion-input>
+      }" placeholder="Ej. 0801200012345" formControlName="dni"></ion-input>
 
       <br />
 
@@ -149,10 +132,7 @@ components - models - pages - services
       {
         'ionInputStyle': !isTelefonoInvalid && !isTelefonoIMinInvalid,
         'ionInputStyle-invalid': isTelefonoInvalid || isTelefonoIMinInvalid
-      }"  
-      placeholder="Ej. 97868399" 
-      type="tel"
-      formControlName="telefono"></ion-input>
+      }" placeholder="Ej. 97868399" type="tel" formControlName="telefono"></ion-input>
 
       <br />
 
