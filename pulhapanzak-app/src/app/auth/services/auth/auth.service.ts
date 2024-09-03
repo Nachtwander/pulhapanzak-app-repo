@@ -9,7 +9,7 @@ import {
   UserCredential,
   createUserWithEmailAndPassword,
   sendPasswordResetEmail,
-  
+  User,
 } from '@angular/fire/auth';
 
 import {
@@ -38,6 +38,20 @@ export class AuthService {
 
   constructor() {}
 
+  //si hay un usuario loggueado va a devolver un true y si no un false
+  //la promesa va a devolver el boolean
+  async isUserLoggued(): Promise <boolean> {
+    return new Promise <boolean> ((resolve)=>{
+      this._auth.onAuthStateChanged((user: User | null)=>{
+        if(user) {
+          resolve(true)
+        } else{
+          resolve(false)
+        }
+      })
+    })
+  }
+
   //metodo asincronico de creacion de usuarios
   async createUserInfirestore(user: registerDto): Promise<void> {
     //variable docRef que es un documento de referencia que recibe la informacion de usuarios
@@ -48,13 +62,17 @@ export class AuthService {
       apellidos: user.apellidos,
       correo: user.correo,
       dni: user.dni,
-      telefono: user.telefono
+      telefono: user.telefono,
     });
   }
 
   //metodo asincronico de login que utiliza la interface de loginDTO que es del tipo promesa
   //la promesa es una credencial de usuario.
   async login(model: loginDto): Promise<UserCredential> {
+    // esta promesa rechaza el intento de loguin cuando estan loggueados
+    const isUserLoggued : boolean = await this.isUserLoggued();
+    if (isUserLoggued) return Promise.reject('Ya hay un usuario en uso')
+
     return await signInWithEmailAndPassword(
       this._auth,
       model.correo,
@@ -64,6 +82,10 @@ export class AuthService {
 
   //metodo asincronico para registrar un usuario con correo y contraseña
   async singUp(model: registerDto): Promise<UserCredential> {
+    // esta promesa rechaza el intento de registro cuando estan loggueados
+    const isUserLoggued : boolean = await this.isUserLoggued();
+    if (isUserLoggued) return Promise.reject('Ya hay un usuario en uso')
+
     return await createUserWithEmailAndPassword(
       this._auth,
       model.correo,
@@ -73,15 +95,16 @@ export class AuthService {
 
   //metodo asincronico para cerrar sesion
   async singOut(): Promise<void> {
+    const isUserLoggued : boolean = await this.isUserLoggued();
+    if (isUserLoggued){
+      return await this._auth.signOut();
+    }
     return await this._auth.signOut();
   }
 
-  async resetPassword(model: passwordResetDto):Promise <void> {
-    return await sendPasswordResetEmail(
-      this._auth,
-      model.correo
-    )
+  //metodo para hacer reset del password
+  async resetPassword(model: passwordResetDto): Promise<void> {
+    return await sendPasswordResetEmail(this._auth, model.correo);
   }
-
+  //final
 }
-
