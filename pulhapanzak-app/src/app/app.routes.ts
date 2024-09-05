@@ -24,16 +24,17 @@ export const routes: Routes = [
     path: 'forgot-password',
     loadComponent: () => import('./auth/pages/forgotPassword/forgot-password/forgot-password.page').then( m => m.ForgotPasswordPage)
   },
-  {
+ /* {
     path: 'tabs',
     loadComponent: () => import('./auth/pages/tabs/tabs.page').then( m => m.TabsPage),
     canActivate : [()=> inject(AuthGuard).canActivate()]
-  },
+  },*/
   
   // esta ruta redirige al login cuando la app inicia
+  //todavia no
   {
     path: '',
-    redirectTo: 'login',
+    redirectTo: 'home',
     pathMatch: 'full',
   },
   

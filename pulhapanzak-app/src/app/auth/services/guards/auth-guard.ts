@@ -21,9 +21,9 @@ export class AuthGuard {
     // si isUserLoggued es distinto de true lo enviara a la pantalla login
     if (!isUserLoggued) {
       this._router.navigate(['/login']);
-      return false;
+      
     }
-    return true;
+    return isUserLoggued;
   }
 
   //final
