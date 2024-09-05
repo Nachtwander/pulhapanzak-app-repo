@@ -26,7 +26,7 @@ export const routes: Routes = [
   },
   {
     path: 'tabs',
-    loadComponent: () => import('./auth/pages/tabs/tabs.page').then( m => m.TabsPage),
+    loadComponent: () => import('./auth/shared/ui/pages/tabs/tabs.page').then( m => m.TabsPage),
     canActivate : [()=> inject(AuthGuard).canActivate()]
   },
   
