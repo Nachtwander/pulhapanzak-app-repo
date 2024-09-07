@@ -20,6 +20,7 @@ import {
   doc,
   setDoc,
 } from '@angular/fire/firestore';
+import { getDoc } from 'firebase/firestore';
 
 const PATH: string = 'users';
 
@@ -52,7 +53,7 @@ export class AuthService {
     })
   }
 
-  //metodo asincronico de creacion de usuarios
+  //metodo asincronico de creacion de usuarios en Firestore con un UID especifico
   async createUserInfirestore(user: registerDto): Promise<void> {
     //variable docRef que es un documento de referencia que recibe la informacion de usuarios
     const docRef: DocumentReference = doc(this._collection, user.uid);
@@ -63,6 +64,20 @@ export class AuthService {
       correo: user.correo,
       dni: user.dni,
       telefono: user.telefono,
+      uid: docRef.id,
+    });
+  }
+
+  //metodo asincronico de creacion de usuarios en firestore con un UID generado por Firestore
+  async createUser(user: registerDto): Promise<void> {
+    const docRef: DocumentReference = doc(this._collection);
+    await setDoc(docRef, {
+      nombres: user.nombres,
+      apellidos: user.apellidos,
+      correo: user.correo,
+      dni: user.dni,
+      telefono: user.telefono,
+      uid: docRef.id,
     });
   }
 
@@ -105,6 +120,41 @@ export class AuthService {
   //metodo para hacer reset del password
   async resetPassword(model: passwordResetDto): Promise<void> {
     return await sendPasswordResetEmail(this._auth, model.correo);
+  }
+
+  //metodo GET para obtener el usuario logueado actual
+  async getCurrentUser(): Promise <User | null> {
+    return new Promise <User | null> ((resolve)=>{
+      this._auth.onAuthStateChanged((user: User | null)=>{
+        if(user) {
+          resolve(user)
+        } else{
+          resolve(null)
+        }
+      })
+    })
+  }
+
+  //metodo GET para obtener usuario por el ID
+  async getUserByID(): Promise <registerDto>{
+    try{
+      //la constante user toma el valor del usuario loggueado actual
+      const user = await this.getCurrentUser();
+      //docRef es igual al metodo doc() que tiene los datos de _firestore, la ruta PATH y el usuario.uid
+      //si no existe toma valor vacio
+      const docRef = doc(this._firestore, PATH, user?.uid ?? '');
+      //userSnapshot es igual al metodo getDoc() que recibe los datos de docRef
+      const userSnapshot = await getDoc(docRef);
+      //si el usuario existe retorna sus datos alojados en firestore
+      if(userSnapshot.exists()){
+        return userSnapshot.data() as registerDto
+      }
+      //sino, datos vacios
+      return {} as registerDto
+    }catch (error) {
+      //si da error, datos vacios
+      return {} as registerDto
+    }
   }
   //final
 }

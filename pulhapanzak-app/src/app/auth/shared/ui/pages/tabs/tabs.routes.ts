@@ -1,7 +1,6 @@
 import { Routes } from '@angular/router';
 import { TabsPage } from './tabs.page';
-import { AuthGuard } from 'src/app/auth/services/guards/auth-guard';
-import { inject } from '@angular/core';
+
 
 export const routes: Routes = [
   {
@@ -25,6 +24,12 @@ export const routes: Routes = [
       {
         path: 'profile',
         loadComponent: () =>import('./../../../../../profile/pages/profile/profile.page').then((m) => m.ProfilePage),
+      },
+      //si el usuario ingresa una ruta desconocida lo redirigimos a home
+      {
+        path: '**',
+        redirectTo: 'tabs/home',
+        pathMatch: 'full',
       },
     ],
   },
