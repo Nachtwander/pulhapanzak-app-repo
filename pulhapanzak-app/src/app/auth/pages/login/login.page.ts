@@ -152,7 +152,7 @@ export class LoginPage {
           console.log(user);
           //mostrara una alerta cuando se ingrese con exito
           await this.showAlert('Ingreso con exito');
-          this._router.navigate(['/home']);
+          this._router.navigate(['/tabs/home']);
           this.resetForm();
         })
         .catch(async () => {

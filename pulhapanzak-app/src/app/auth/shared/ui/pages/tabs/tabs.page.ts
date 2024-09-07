@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { addIcons } from 'ionicons';
+import { CommonModule } from '@angular/common';
 import {
   homeOutline,
   imageOutline,
@@ -18,7 +19,7 @@ import {
   templateUrl: './tabs.page.html',
   styleUrls: ['./tabs.page.scss'],
   standalone: true,
-  imports: [IonIcon, IonLabel, IonTabBar, IonTabButton, IonTabs],
+  imports: [IonIcon, IonLabel, IonTabBar, IonTabButton, IonTabs, CommonModule],
 })
 export class TabsPage {
   constructor() {

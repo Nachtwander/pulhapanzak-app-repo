@@ -1,5 +1,6 @@
-<ion-tabs>
-  <ion-tab-bar slot="bottom">
+<ion-tabs [ngClass]="'tabsBackgroundColor'">
+  <ion-tab-bar [ngClass]="'tabBarColor'" slot="bottom">
+    
     <!--tab home-->
     <ion-tab-button tab="home">
       <ion-icon name="home-outline"></ion-icon>
@@ -17,5 +18,6 @@
       <ion-icon name="person-outline"></ion-icon>
       <ion-label> Perfil </ion-label>
     </ion-tab-button>
+
   </ion-tab-bar>
 </ion-tabs>

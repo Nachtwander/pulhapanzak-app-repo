@@ -249,7 +249,7 @@ export class RegisterPage{
           console.log(result);
           //mostrara una alerta cuando se ingrese con exito
           await this.showAlert('Usuario registrado con exito');
-          this._router.navigate(['/home']);
+          this._router.navigate(['/tabs/home']);
           this.resetForm();
         });
 
