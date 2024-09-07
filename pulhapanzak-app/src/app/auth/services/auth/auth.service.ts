@@ -20,7 +20,7 @@ import {
   doc,
   setDoc,
 } from '@angular/fire/firestore';
-import { getDoc } from 'firebase/firestore';
+import { getDoc, getDocs, query, where } from 'firebase/firestore';
 
 const PATH: string = 'users';
 
@@ -155,6 +155,22 @@ export class AuthService {
       //si da error, datos vacios
       return {} as registerDto
     }
+  }
+
+   //metodo GET para obtener usuario por Query
+   async getUserByQuery(): Promise <registerDto>{
+      const user = await this.getCurrentUser();
+      //userQuery es una funcion query con el valor de la coleccion usuarios que tengan uid, se puede usar mas de un where
+      const userQuery = query(this._collection, where('uid', '==', user?.uid),/*where('email', '==', user?.email,*/ );
+      //userSnapshot optiene el valor de los usuarios con uid
+      const userSnapshot = await getDocs(userQuery);
+      //si el userSnapshot es contrario de vacio, retornara el primer valor del arreglo.
+      if(!userSnapshot.empty){
+        return userSnapshot.docs[0].data() as registerDto
+      }
+      //sino, datos vacios
+      return {} as registerDto
+    
   }
   //final
 }
