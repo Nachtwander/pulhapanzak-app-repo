@@ -12,17 +12,20 @@
   <!-- Creamos formulario de Registro, el (ngSubmit)="save()" activa la funcion save() -->
   <form style="width: 100%" [formGroup]="profileForm" (ngSubmit)="onSubmit()">
 
-    <div>
-      <ion-img [src]="user.photo" [ngClass]="'image-profile '"></ion-img>
+    <div [ngClass]="'div'">
+      <!--user.photo obtiene la photo de firebase-->
+      <ion-img [src]="user.photo" [ngClass]="'image-profile'" (click)="onPickImage()"></ion-img>
     </div>
 
     <!--ion-label e ion-input para Nombres: -->
-    <div>
-      <ion-icon name="person-outline" [ngClass]="'ion-icon'"></ion-icon>
-      <span class="label-text" style="color: black;">Nombres:</span>
-      <ion-note class="form--error-menssage">
-        <span *ngIf="isNombresNull"> Los Nombres son Requeridos. *</span>
-      </ion-note>
+    <div [ngClass]="'div'">
+      <div [ngClass]="'divIconLabel'">
+        <ion-icon name="person-outline" [ngClass]="'ion-icon'"></ion-icon>
+        <span class="label-text" style="color: black;">Nombres:</span>
+        <ion-note class="form--error-menssage">
+          <span *ngIf="isNombresNull"> Los Nombres son Requeridos. *</span>
+        </ion-note>
+      </div>
       <ion-input [ngClass]="
       {
       'ionInputStyle': !isNombresNull,
@@ -34,12 +37,14 @@
     <!-- FIN ion-label e ion-input para Nombres: -->
 
     <!--ion-label e ion-input para Apellidos: -->
-    <div>
-      <ion-icon name="person-outline" [ngClass]="'ion-icon'"></ion-icon>
-      <span class="label-text" style="color: black;">Apellidos:</span>
-      <ion-note class="form--error-menssage">
-        <span *ngIf="isApellidosNull"> Los Apellidos son Requeridos. *</span>
-      </ion-note>
+    <div [ngClass]="'div'">
+      <div [ngClass]="'divIconLabel'">
+        <ion-icon name="person-outline" [ngClass]="'ion-icon'"></ion-icon>
+        <span class="label-text" style="color: black;">Apellidos:</span>
+        <ion-note class="form--error-menssage">
+          <span *ngIf="isApellidosNull"> Los Apellidos son Requeridos. *</span>
+        </ion-note>
+      </div>
       <ion-input [ngClass]="
       {
         'ionInputStyle': !isApellidosNull,
@@ -50,14 +55,11 @@
     <!-- FIN ion-label e ion-input para Apellidos: -->
 
     <!--ion-label e ion-input para Correo: -->
-    <div>
-      <ion-icon name="at-circle-outline" [ngClass]="'ion-icon'"></ion-icon>
-      <span class="label-text" style="color: black;">Correo:</span>
-      <ion-note class="form--error-menssage">
-        <span *ngIf="isEmailRequired"> El correo es Requerido *</span>
-        <span *ngIf="isEmailInvalid">
-          El correo electronico es invalido. *</span>
-      </ion-note>
+    <div [ngClass]="'div'">
+      <div [ngClass]="'divIconLabel'">
+        <ion-icon name="at-circle-outline" [ngClass]="'ion-icon'"></ion-icon>
+        <span class="label-text" style="color: black;">Correo:</span>
+      </div>
       <ion-input [ngClass]="
       {
         'ionInputStyle': !isEmailRequired && !isEmailInvalid,
@@ -68,18 +70,20 @@
     <!-- FIN ion-label e ion-input para Correo: -->
 
     <!--ion-label e ion-input para DNI: -->
-    <div>
-      <ion-icon name="id-card-outline" [ngClass]="'ion-icon'"></ion-icon>
-      <span class="label-text" style="color: black;">DNI:</span>
-      <ion-note class="form--error-menssage">
-        <ion-note *ngIf="isDniMinLengthInvalid" class="form--error-menssage">
-          El DNI es obligatorio y no puede ser menor de 13 digitos.
-          *</ion-note>
-        <ion-note *ngIf="isDniMaxLengthInvalid" class="form--error-menssage">
-          El DNI no puede ser mayor de 13 digitos. *</ion-note>
-        <ion-note *ngIf="isDniHasLettersOrSpaces" class="form--error-menssage">
-          El DNI no puede contener letras o espacios. *</ion-note>
-      </ion-note>
+    <div [ngClass]="'div'">
+      <div [ngClass]="'divIconLabel'">
+        <ion-icon name="id-card-outline" [ngClass]="'ion-icon'"></ion-icon>
+        <span class="label-text" style="color: black;">DNI:</span>
+        <ion-note class="form--error-menssage">
+          <ion-note *ngIf="isDniMinLengthInvalid" class="form--error-menssage">
+            El DNI es obligatorio y no puede ser menor de 13 digitos.
+            *</ion-note>
+          <ion-note *ngIf="isDniMaxLengthInvalid" class="form--error-menssage">
+            El DNI no puede ser mayor de 13 digitos. *</ion-note>
+          <ion-note *ngIf="isDniHasLettersOrSpaces" class="form--error-menssage">
+            El DNI no puede contener letras o espacios. *</ion-note>
+        </ion-note>
+      </div>
       <ion-input [ngClass]="
       {
         'ionInputStyle': !isDniMinLengthInvalid && !isDniMaxLengthInvalid && !isDniHasLettersOrSpaces,
@@ -90,14 +94,16 @@
     <!--FIN ion-label e ion-input para Correo: -->
 
     <!--ion-label e ion-input para Telefono: -->
-    <div>
-      <ion-icon name="call-outline" [ngClass]="'ion-icon'"></ion-icon>
-      <span class="label-text" style="color: black;">Telefono:</span>
-      <ion-note class="form--error-menssage">
-        <ion-note *ngIf="isTelefonoInvalid || isTelefonoIMinInvalid" class="form--error-menssage">
-          El Telefono es obligatorio y no puede ser menor de 8 digitos.
-          *</ion-note>
-      </ion-note>
+    <div [ngClass]="'div'">
+      <div [ngClass]="'divIconLabel'">
+        <ion-icon name="call-outline" [ngClass]="'ion-icon'"></ion-icon>
+        <span class="label-text" style="color: black;">Telefono:</span>
+        <ion-note class="form--error-menssage">
+          <ion-note *ngIf="isTelefonoInvalid || isTelefonoIMinInvalid" class="form--error-menssage">
+            El Telefono es obligatorio y no puede ser menor de 8 digitos.
+            *</ion-note>
+        </ion-note>
+      </div>
       <ion-input [ngClass]="
       {
         'ionInputStyle': !isTelefonoInvalid && !isTelefonoIMinInvalid,
@@ -114,6 +120,10 @@
         <ion-spinner *ngIf="spinner" style="margin-right: 10px"></ion-spinner>
         Guardar Cambios
       </ion-button>
+    </div>
+
+    <div style="display: flex; justify-content: center; margin-top: 20px">
+      <ion-button (click)="logOut()">Cerrar Sesion</ion-button>
     </div>
   </form>
 </ion-content>

@@ -2,6 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { registerDto } from 'src/app/auth/models/register.dto';
 import { addIcons } from 'ionicons';
+import { Camera, CameraResultType} from '@capacitor/camera'; //importamos las clases para usar la camara
 import {
   atCircleOutline,
   lockOpenOutline,
@@ -89,6 +90,7 @@ export class ProfilePage implements OnInit {
   user: registerDto = {} as registerDto;
   private _toastController: ToastController = inject(ToastController);
   private formBuilder: FormBuilder = inject(FormBuilder);
+  private _router: Router = inject(Router);
   spinner: boolean = false;
   disabled: boolean = false;
 
@@ -243,6 +245,25 @@ export class ProfilePage implements OnInit {
           );
         });
     }
+  }
+
+  async logOut(): Promise<void> {
+    await this._authService
+      .singOut()
+      .then(async () => {
+        this._router.navigate(['/login']);
+        await this.showAlert('se ha cerrardo la sesion');
+      })
+      .catch(async (error) => {
+        await this.showAlert(
+          'ocurrio un error al intentar cerrar la sesion',
+          true
+        );
+      });
+  }
+
+  onPickImage(): void {
+
   }
   //final
 }

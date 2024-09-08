@@ -17,11 +17,19 @@
 .ion-icon {
   color: black;
   font-size: 24px;
-  margin-bottom: -5px;
+  padding-right: 5px;
+}
+
+.div{
+  padding: 5px;
+}
+
+.divIconLabel{
+  display: flex;
+  align-items: center;
 }
 
 .image-profile {
-  max-width: 200px;
-  max-height: 200px;
+  width: 200px;
   margin: 0 auto;
 }
