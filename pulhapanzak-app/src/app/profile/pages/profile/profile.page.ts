@@ -5,7 +5,6 @@ import { addIcons } from 'ionicons';
 import { Camera, CameraResultType } from '@capacitor/camera'; //importamos las clases para usar la camara
 import {
   atCircleOutline,
-  lockOpenOutline,
   personOutline,
   idCardOutline,
   callOutline,

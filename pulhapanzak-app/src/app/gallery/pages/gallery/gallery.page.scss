@@ -1,0 +1,30 @@
+.ion-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  --background: #ffffff;
+  padding: 16px;
+}
+
+.gallery-container {
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(150px, 1fr)
+  ); // Tamaño fijo de 150px para las imágenes
+  gap: 10px; // Espacio entre imágenes
+  padding: 10px; // Espacio interno del contenedor
+}
+
+.gallery-item {
+  overflow: hidden; // Asegura que las imágenes no se salgan del contenedor
+  border-radius: 8px; // Opcional: bordes redondeados
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); // Opcional: sombra de caja para las imágenes
+}
+
+.gallery-item img {
+  width: 100%;
+  height: auto;
+  object-fit: cover; // Ajusta la imagen al tamaño del contenedor manteniendo el aspecto
+}

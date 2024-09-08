@@ -1,15 +1,20 @@
 <ion-header [translucent]="true">
   <ion-toolbar style="--background: red">
-      <ion-title>Galeria</ion-title>
+    <ion-title>Galeria</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true" style="
-display: flex;
-justify-content: center;
-align-items: center;
-height: 100%;
---background: #ffffff;
-padding: 16px;
-">
+<ion-content [fullscreen]="true" [ngClass]="'ion-content'">
+  <div class="gallery-container">
+    <div *ngFor="let item of galleryItems" class="gallery-item">
+      <img [src]="item.photo" [alt]="item.placeName" />
+    </div>
+  </div>
+
+   <!-- Floating Action Button -->
+   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button>
+      <ion-icon name="add-circle-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
 </ion-content>

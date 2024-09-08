@@ -12,5 +12,10 @@ height: 100%;
 --background: #ffffff;
 padding: 16px;
 ">
+
+<h2 [ngClass]="'h2'">
+    Bienvenido {{usuariologgued}}
+  </h2>
  <ion-button (click)="logOut()">Cerrar Sesion</ion-button>
 </ion-content>
+
