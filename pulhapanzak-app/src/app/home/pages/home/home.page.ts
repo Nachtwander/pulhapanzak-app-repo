@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { RegisterPage } from 'src/app/auth/pages/register/register.page';
 import { AuthService } from 'src/app/auth/services/auth/auth.service';
@@ -8,16 +8,14 @@ import {
   IonTitle,
   IonContent,
   IonButton,
-  ToastController,
-} from '@ionic/angular/standalone';
-
+  ToastController, IonNote } from '@ionic/angular/standalone';
 
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
   standalone: true,
-  imports: [
+  imports: [IonNote, 
     IonHeader,
     IonToolbar,
     IonTitle,
@@ -26,7 +24,7 @@ import {
     IonButton,
   ],
 })
-export class HomePage {
+export class HomePage implements OnInit {
   //creamos variable que sera del tipo del servicio AuthService (services\auth) para autenticar al usuario
   private _authService: AuthService = inject(AuthService);
   //se usa para navegar entre paginas
@@ -39,12 +37,15 @@ export class HomePage {
   async logOut(): Promise<void> {
     await this._authService
       .singOut()
-      .then( async () => {
+      .then(async () => {
         this._router.navigate(['/login']);
         await this.showAlert('se ha cerrardo la sesion');
       })
-      .catch( async (error) => {
-        await this.showAlert('ocurrio un error al intentar cerrar la sesion', true);
+      .catch(async (error) => {
+        await this.showAlert(
+          'ocurrio un error al intentar cerrar la sesion',
+          true
+        );
       });
   }
 
@@ -57,4 +58,35 @@ export class HomePage {
     });
     toast.present();
   }
+
+  //utilizamos el ngOnInit para probar el metodo getCurrentUser de AuthService
+  async ngOnInit(): Promise<void> {
+    //getUserByID
+    await this._authService
+      .getUserByID()
+      .then(async (user) => {
+        console.log('userByID => ', user);
+      })
+      .catch(async () => {
+        await this.showAlert(
+          'ocurrio un error al intentar obtener datos de sesión (getUserByID)',
+          true
+        );
+      });
+
+    //getUserByQuery
+    await this._authService
+      .getUserByQuery()
+      .then(async (user) => {
+        console.log('userByQuery => ', user);
+      })
+      .catch(async (error) => {
+        console.log('error => ', error);
+        await this.showAlert(
+          'ocurrio un error al intentar obtener datos de sesión (getUserByQuery)',
+          true
+        );
+      });
+  }
+  //final
 }

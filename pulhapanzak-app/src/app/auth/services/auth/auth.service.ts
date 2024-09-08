@@ -19,8 +19,14 @@ import {
   DocumentReference,
   doc,
   setDoc,
+  getDoc,
+  getDocs,
+  query,
+  where,
+  deleteDoc,
+  orderBy,
+  updateDoc,
 } from '@angular/fire/firestore';
-import { getDoc, getDocs, query, where } from 'firebase/firestore';
 
 const PATH: string = 'users';
 
@@ -39,20 +45,6 @@ export class AuthService {
 
   constructor() {}
 
-  //si hay un usuario loggueado va a devolver un true y si no un false
-  //la promesa va a devolver el boolean
-  async isUserLoggued(): Promise <boolean> {
-    return new Promise <boolean> ((resolve)=>{
-      this._auth.onAuthStateChanged((user: User | null)=>{
-        if(user) {
-          resolve(true)
-        } else{
-          resolve(false)
-        }
-      })
-    })
-  }
-
   //metodo asincronico de creacion de usuarios en Firestore con un UID especifico
   async createUserInfirestore(user: registerDto): Promise<void> {
     //variable docRef que es un documento de referencia que recibe la informacion de usuarios
@@ -65,6 +57,8 @@ export class AuthService {
       dni: user.dni,
       telefono: user.telefono,
       uid: docRef.id,
+      isActive: true,
+      photo: '',
     });
   }
 
@@ -78,6 +72,8 @@ export class AuthService {
       dni: user.dni,
       telefono: user.telefono,
       uid: docRef.id,
+      isActive: true,
+      photo: '',
     });
   }
 
@@ -85,8 +81,8 @@ export class AuthService {
   //la promesa es una credencial de usuario.
   async login(model: loginDto): Promise<UserCredential> {
     // esta promesa rechaza el intento de loguin cuando estan loggueados
-    const isUserLoggued : boolean = await this.isUserLoggued();
-    if (isUserLoggued) return Promise.reject('Ya hay un usuario en uso')
+    const isUserLoggued: boolean = await this.isUserLoggued();
+    if (isUserLoggued) return Promise.reject('Ya hay un usuario en uso');
 
     return await signInWithEmailAndPassword(
       this._auth,
@@ -98,8 +94,8 @@ export class AuthService {
   //metodo asincronico para registrar un usuario con correo y contraseña
   async singUp(model: registerDto): Promise<UserCredential> {
     // esta promesa rechaza el intento de registro cuando estan loggueados
-    const isUserLoggued : boolean = await this.isUserLoggued();
-    if (isUserLoggued) return Promise.reject('Ya hay un usuario en uso')
+    const isUserLoggued: boolean = await this.isUserLoggued();
+    if (isUserLoggued) return Promise.reject('Ya hay un usuario en uso');
 
     return await createUserWithEmailAndPassword(
       this._auth,
@@ -110,8 +106,8 @@ export class AuthService {
 
   //metodo asincronico para cerrar sesion
   async singOut(): Promise<void> {
-    const isUserLoggued : boolean = await this.isUserLoggued();
-    if (isUserLoggued){
+    const isUserLoggued: boolean = await this.isUserLoggued();
+    if (isUserLoggued) {
       return await this._auth.signOut();
     }
     return await this._auth.signOut();
@@ -122,55 +118,94 @@ export class AuthService {
     return await sendPasswordResetEmail(this._auth, model.correo);
   }
 
-  //metodo GET para obtener el usuario logueado actual
-  async getCurrentUser(): Promise <User | null> {
-    return new Promise <User | null> ((resolve)=>{
-      this._auth.onAuthStateChanged((user: User | null)=>{
-        if(user) {
-          resolve(user)
-        } else{
-          resolve(null)
+  //si hay un usuario loggueado va a devolver un true y si no un false
+  //la promesa va a devolver el boolean
+  async isUserLoggued(): Promise<boolean> {
+    return new Promise<boolean>((resolve) => {
+      this._auth.onAuthStateChanged((user: User | null) => {
+        if (user) {
+          resolve(true);
+        } else {
+          resolve(false);
         }
-      })
-    })
+      });
+    });
   }
 
-  //metodo GET para obtener usuario por el ID
-  async getUserByID(): Promise <registerDto>{
-    try{
-      //la constante user toma el valor del usuario loggueado actual
-      const user = await this.getCurrentUser();
+  //metodo GET para obtener el usuario logueado actual
+  private async getCurrentUser(): Promise<User | null> {
+    return new Promise<User | null>((resolve) => {
+      this._auth.onAuthStateChanged((user: User | null) => {
+        if (user) {
+          resolve(user);
+        } else {
+          resolve(null);
+        }
+      });
+    });
+  }
+
+  //metodo GET para obtener usuario por el UID del documento
+  async getUserByID(): Promise<registerDto | null> {
+    try {
+      const user = await this.getCurrentUser(); //la constante user toma el valor del usuario loggueado actual
       //docRef es igual al metodo doc() que tiene los datos de _firestore, la ruta PATH y el usuario.uid
       //si no existe toma valor vacio
       const docRef = doc(this._firestore, PATH, user?.uid ?? '');
-      //userSnapshot es igual al metodo getDoc() que recibe los datos de docRef
-      const userSnapshot = await getDoc(docRef);
+      const userSnapshot = await getDoc(docRef); //userSnapshot es igual al metodo getDoc() que recibe los datos de docRef
       //si el usuario existe retorna sus datos alojados en firestore
-      if(userSnapshot.exists()){
-        return userSnapshot.data() as registerDto
+      if (userSnapshot.exists()) {
+        return userSnapshot.data() as registerDto;
       }
-      //sino, datos vacios
-      return {} as registerDto
-    }catch (error) {
-      //si da error, datos vacios
-      return {} as registerDto
+      //sino, que sea nulo
+      return null;
+    } catch (error) {
+      //si da error, enviamos mensaje de error
+      throw new Error('El Usuario no existe.');
     }
   }
 
-   //metodo GET para obtener usuario por Query
-   async getUserByQuery(): Promise <registerDto>{
-      const user = await this.getCurrentUser();
-      //userQuery es una funcion query con el valor de la coleccion usuarios que tengan uid, se puede usar mas de un where
-      const userQuery = query(this._collection, where('uid', '==', user?.uid),/*where('email', '==', user?.email,*/ );
-      //userSnapshot optiene el valor de los usuarios con uid
-      const userSnapshot = await getDocs(userQuery);
-      //si el userSnapshot es contrario de vacio, retornara el primer valor del arreglo.
-      if(!userSnapshot.empty){
-        return userSnapshot.docs[0].data() as registerDto
-      }
-      //sino, datos vacios
-      return {} as registerDto
-    
+  //metodo GET para obtener usuario por Query
+  async getUserByQuery(): Promise<registerDto | null> {
+    const user = await this.getCurrentUser();
+    const userQuery = query(
+      //userQuery toma los datos de una funcion query con el valor de la coleccion usuarios que tengan uid, se puede usar mas de un where
+      this._collection,
+      where('uid', '==', user?.uid),
+      where('isActive', '==', true),
+      //orderBy('nombres', 'desc'),//metodo para ordenar de forma  descendente
+      orderBy('nombres', 'asc') //metodo para ordenar de forma ascendente
+    );
+    const userSnapshot = await getDocs(userQuery); //userSnapshot optiene el valor de los usuarios con uid
+    if (userSnapshot.empty) {
+      return null; //si esta vacio, datos vacios
+    }
+    return userSnapshot.docs[0].data() as registerDto; //si el userSnapshot es contrario de vacio, retornara el primer valor del arreglo.
+  }
+
+  //metodo para actualizar un usuario en Firestore
+  async updateUser(user: registerDto): Promise<void> {
+    if (!user.uid) throw new Error('UID del usuario no existe');
+    const docRef = doc(this._collection, user.uid);
+    await updateDoc(docRef, {
+      ...{
+        //los tres puntos le dicen a Firestore que actualice unicamente los datos enviados, no toda la coleccion.
+        nombres: user.nombres,
+        apellidos: user.apellidos,
+        correo: user.correo,
+        dni: user.dni,
+        telefono: user.telefono,
+        photo: user.photo, //para actualizar foto de perfil
+      },
+    });
+  }
+
+  //metodo para eliminar usuario
+  async deleteUser(id: string): Promise<void> {
+    if (!id) throw new Error('El UID del usuario es requerido');
+
+    const docRef = doc(this._collection, id);
+    await deleteDoc(docRef);
   }
   //final
 }
