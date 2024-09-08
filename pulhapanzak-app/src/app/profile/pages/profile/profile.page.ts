@@ -38,6 +38,7 @@ import {
 } from '@ionic/angular/standalone';
 
 import { user } from '@angular/fire/auth';
+import { ProfileService } from '../../services/profile.service';
 
 @Component({
   selector: 'app-profile',
@@ -93,6 +94,9 @@ export class ProfilePage implements OnInit {
   private _router: Router = inject(Router);
   spinner: boolean = false;
   disabled: boolean = false;
+
+  //injectamos Profile Service para usar el metodo uploadImage()
+  private _profileService: ProfileService = inject(ProfileService);
 
   profileForm: FormGroup = this.formBuilder.group({
     nombres: ['', [Validators.required]],
@@ -229,21 +233,25 @@ export class ProfilePage implements OnInit {
       this.disabled = true;
       let user: registerDto = this.profileForm.value as registerDto;
       user.correo = this.user.correo;
-      this._authService
-        .updateUser(user)
-        .then(async () => {
-          this.spinner = false;
-          this.disabled = false;
-          await this.showAlert('Datos de Usuario Actualizados');
+
+      this._profileService
+        .uploadImage(user.photo, user.uid) //user photo viene de onPickImage()
+        .then(async (url: string) => {
+          user.photo = url;
+          this._authService
+            .updateUser(user)
+            .then(async () => {
+              this.spinner = false;
+              this.disabled = false;
+              await this.showAlert('Datos de Usuario Actualizados');
+            })
+            .catch(async () => {
+              this.spinner = false;
+              this.disabled = false;
+              await this.showAlert('Ha Ocurrido un error', true);
+            });
         })
-        .catch(async () => {
-          this.spinner = false;
-          this.disabled = false;
-          await this.showAlert(
-            'Ocurrio un error al Actualizar los Datos de Usuario',
-            true
-          );
-        });
+        .catch(async () => await this.showAlert('Ha Ocurrido un error', true));
     }
   }
 
