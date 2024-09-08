@@ -2,7 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { registerDto } from 'src/app/auth/models/register.dto';
 import { addIcons } from 'ionicons';
-import { Camera, CameraResultType} from '@capacitor/camera'; //importamos las clases para usar la camara
+import { Camera, CameraResultType } from '@capacitor/camera'; //importamos las clases para usar la camara
 import {
   atCircleOutline,
   lockOpenOutline,
@@ -262,8 +262,21 @@ export class ProfilePage implements OnInit {
       });
   }
 
-  onPickImage(): void {
+  async onPickImage(): Promise<void> {
+    const image = await Camera.getPhoto({
+      quality: 90,
+      allowEditing: false,
+      resultType: CameraResultType.Uri,
+      saveToGallery: true,
+      promptLabelHeader: 'Seleccione una fotografia',
+      promptLabelPhoto: 'Elegir de Galeria',
+      promptLabelPicture: 'Tomar una foto',
+      promptLabelCancel: 'Cancelar',
+    });
+    if (!image) return;
 
+    this.user.photo = image.webPath ?? image.path ?? '';
+    this.profileForm.patchValue({ photo: this.user.photo });
   }
   //final
 }
