@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "435698089790",
+    "project_id": "pulhapanzak-app",
+    "storage_bucket": "pulhapanzak-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:435698089790:android:f4eaa127a239208fae766f",
+        "android_client_info": {
+          "package_name": "com.ceutec.pulhapanzakapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCNotURlA95uD5jfrj9COKVzIVsyGEETtk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
