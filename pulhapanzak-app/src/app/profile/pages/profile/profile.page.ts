@@ -8,6 +8,7 @@ import {
   personOutline,
   idCardOutline,
   callOutline,
+  calendarOutline,
 } from 'ionicons/icons';
 import { AuthService } from 'src/app/auth/services/auth/auth.service';
 import { Router } from '@angular/router';
@@ -34,9 +35,9 @@ import {
   IonInputPasswordToggle,
   ToastController,
   IonImg,
+  IonDatetime
 } from '@ionic/angular/standalone';
 
-import { user } from '@angular/fire/auth';
 import { ProfileService } from '../../services/profile.service';
 
 @Component({
@@ -61,6 +62,7 @@ import { ProfileService } from '../../services/profile.service';
     IonIcon,
     IonInputPasswordToggle,
     IonImg,
+    IonDatetime
   ],
   styles: [
     `
@@ -81,6 +83,29 @@ import { ProfileService } from '../../services/profile.service';
         --padding-start: 10px;
         --padding-end: 10px;
         margin-top: 10px;
+        background-color: white;
+      }
+
+      .ionInputDateStyle {
+        color: black;
+        border: 2px solid black;
+        border-radius: 10px;
+        width: 100%;
+        --padding-start: 10px;
+        --padding-end: 10px;
+        margin-top: 10px;
+        background-color: white;
+      }
+
+      .ionInputDateStyle-invalid {
+        color: black;
+        border: 2px solid red;
+        border-radius: 10px;
+        width: 100%;
+        --padding-start: 10px;
+        --padding-end: 10px;
+        margin-top: 10px;
+        background-color: white;
       }
     `,
   ],
@@ -93,6 +118,7 @@ export class ProfilePage implements OnInit {
   private _router: Router = inject(Router);
   spinner: boolean = false;
   disabled: boolean = false;
+  today = new Date();
 
   //injectamos Profile Service para usar el metodo uploadImage()
   private _profileService: ProfileService = inject(ProfileService);
@@ -101,7 +127,8 @@ export class ProfilePage implements OnInit {
     nombres: ['', [Validators.required]],
     apellidos: ['', [Validators.required]],
     correo: ['', [Validators.required, Validators.email]],
-    photo: ['', [Validators.required]],
+    imageProfile: ['', [Validators.required]],
+    birthDate: ['', [Validators.required, Validators.max(new Date().getTime())]],
     uid: ['', [Validators.required]],
     dni: [
       '',
@@ -124,6 +151,23 @@ export class ProfilePage implements OnInit {
 
   get isFormInvalid(): boolean {
     return this.profileForm.invalid;
+  }
+
+  get isBirthDateInvalid(): boolean {
+    const control: AbstractControl | null = this.profileForm.get('birthDate');
+    return control ? control.invalid && control.touched : false;
+  }
+
+  get isBirthDateInFuture(): boolean {
+    const control: AbstractControl | null = this.profileForm.get('birthDate');
+    
+    if (control && control.value) {
+      const selectedDate = new Date(control.value).getTime();
+      const today = new Date().setHours(23, 59, 59, 999); // Para comparar fecha con ultimo segundo del dia
+      return selectedDate > today; // Retorna true si la fecha es mayor a la actual
+    }
+    
+    return false;
   }
 
   get isNombresNull(): boolean {
@@ -189,7 +233,7 @@ export class ProfilePage implements OnInit {
   }
 
   constructor() {
-    addIcons({ personOutline, atCircleOutline, idCardOutline, callOutline });
+    addIcons({ personOutline, atCircleOutline, idCardOutline, callOutline, calendarOutline });
   }
 
   ngOnInit() {
@@ -205,7 +249,7 @@ export class ProfilePage implements OnInit {
           dni: this.user.dni,
           telefono: this.user.telefono,
           uid: this.user.uid,
-          photo: this.user.photo,
+          imageProfile: this.user.imageProfile,
         });
       })
       .catch(async () => {
@@ -234,9 +278,9 @@ export class ProfilePage implements OnInit {
       user.correo = this.user.correo;
 
       this._profileService
-        .uploadImage(user.photo, user.uid) //user photo viene de onPickImage()
+        .uploadImage(user.imageProfile, user.uid) //user photo viene de onPickImage()
         .then(async (url: string) => {
-          user.photo = url;
+          user.imageProfile = url;
           this._authService
             .updateUser(user)
             .then(async () => {
@@ -271,7 +315,7 @@ export class ProfilePage implements OnInit {
 
   async onPickImage(): Promise<void> {
     const image = await Camera.getPhoto({
-      quality: 90,
+      quality: 100,
       allowEditing: false,
       resultType: CameraResultType.Uri,
       saveToGallery: true,
@@ -282,8 +326,10 @@ export class ProfilePage implements OnInit {
     });
     if (!image) return;
 
-    this.user.photo = image.webPath ?? image.path ?? '';
-    this.profileForm.patchValue({ photo: this.user.photo });
+    this.user.imageProfile = image.webPath ?? image.path ?? '';
+    this.profileForm.patchValue({ imageProfile: this.user.imageProfile });
   }
+
+  
   //final
 }

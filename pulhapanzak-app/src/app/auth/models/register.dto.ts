@@ -9,5 +9,5 @@ export interface registerDto {
   dni: string;
   telefono: string;
   uid:string;
-  photo:string;
+  imageProfile:string;
 }

@@ -33,3 +33,7 @@
   width: 200px;
   margin: 0 auto;
 }
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(1); /* Cambia el color del ícono a negro */
+}

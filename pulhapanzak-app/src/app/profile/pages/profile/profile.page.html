@@ -14,7 +14,7 @@
 
     <div [ngClass]="'div'">
       <!--user.photo obtiene la photo de firebase-->
-      <ion-img [src]="user.photo" [ngClass]="'image-profile'" (click)="onPickImage()"></ion-img>
+      <ion-img [src]="user.imageProfile" [ngClass]="'image-profile'" (click)="onPickImage()"></ion-img>
     </div>
 
     <!--ion-label e ion-input para Nombres: -->
@@ -53,6 +53,24 @@
       <br />
     </div>
     <!-- FIN ion-label e ion-input para Apellidos: -->
+
+    <!--ion-label e ion-input para fecha de nacimiento-->
+    <div [ngClass]="'div'">
+      <div [ngClass]="'divIconLabel'">
+        <ion-icon name="calendar-outline" [ngClass]="'ion-icon'"></ion-icon>
+        <span class="label-text" style="color: black;">Fecha de nacimiento:</span>
+        <ion-note class="form--error-menssage">
+          <span *ngIf="isBirthDateInvalid"> La fecha es invalida, por favor seleccione una fecha. *</span>
+          <span *ngIf="isBirthDateInFuture"> La Fecha de nacimiento no puede ser mayor a la fecha actual. *</span>
+        </ion-note>
+      </div>
+      <input type="date" formControlName="birthDate" max="{{ today | date:'yyyy-MM-dd' }}" [ngClass]="
+      {
+        'ionInputStyle': !isBirthDateInvalid && !isBirthDateInFuture,
+        'ionInputStyle-invalid': isBirthDateInvalid || isBirthDateInvalid
+      }">
+    </div>
+    <!--FIN ion-label e ion-input para fecha de nacimiento-->
 
     <!--ion-label e ion-input para Correo: -->
     <div [ngClass]="'div'">

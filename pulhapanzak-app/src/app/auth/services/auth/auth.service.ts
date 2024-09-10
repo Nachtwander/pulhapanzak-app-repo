@@ -58,7 +58,7 @@ export class AuthService {
       telefono: user.telefono,
       uid: docRef.id,
       isActive: true,
-      photo: '',
+      imageProfile: '',
     });
   }
 
@@ -73,7 +73,7 @@ export class AuthService {
       telefono: user.telefono,
       uid: docRef.id,
       isActive: true,
-      photo: '',
+      imageProfile: '',
     });
   }
 
@@ -195,7 +195,7 @@ export class AuthService {
         correo: user.correo,
         dni: user.dni,
         telefono: user.telefono,
-        photo: user.photo, //para actualizar foto de perfil
+        imageProfile: user.imageProfile, //para actualizar foto de perfil
       },
     });
   }
