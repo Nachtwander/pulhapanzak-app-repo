@@ -50,7 +50,7 @@ import {
   ],
 })
 export class GalleryPage implements OnInit {
-  //creamos variable que sera del tipo del servicio AuthService (services\auth) para autenticar al usuario
+  //creamos variable que injectamos GalleryService
   private _galleryService: GalleryService = inject(GalleryService);
   //se usa para navegar entre paginas
   private _router: Router = inject(Router);

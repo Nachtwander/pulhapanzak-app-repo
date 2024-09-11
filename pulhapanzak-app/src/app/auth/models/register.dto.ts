@@ -10,4 +10,5 @@ export interface registerDto {
   telefono: string;
   uid:string;
   imageProfile:string;
+  birthDate: Date;
 }

@@ -196,6 +196,7 @@ export class AuthService {
         dni: user.dni,
         telefono: user.telefono,
         imageProfile: user.imageProfile, //para actualizar foto de perfil
+        birthDate: user.birthDate
       },
     });
   }

@@ -17,13 +17,13 @@ export class ProfileService {
 
   async uploadImage(image: string, userId: string): Promise<string> {
     try {
-      const url = `${folder}/${userId}.jpg`; //url sera igual al folder y la ruta con userID y guardara la imagen en tipo.jpg, podemos usar .avi o .mp4 para subir videos.
+      const url = `${folder}/${userId}.png`; //url sera igual al folder y la ruta con userID y guardara la imagen en tipo.jpg, podemos usar .avi o .mp4 para subir videos.
       const storageReference = ref(this._storage, url);
       //variable que recibe el valor del storage de firebase, si no hay nada se convierte en nulo
       const imageExist = await getDownloadURL(storageReference).catch(
         () => null
       );
-      //si existe la imagen existe en el folder y tiene el userID, es decir tiene un valor distinto de nulo,
+      //sila imagen existe en el folder y tiene el userID, es decir tiene un valor distinto de nulo,
       //eliminara dicha imagen
       if (imageExist) {
         await deleteObject(ref(this._storage, imageExist)).catch(() => null);

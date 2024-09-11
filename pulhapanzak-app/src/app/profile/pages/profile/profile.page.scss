@@ -37,3 +37,16 @@
 input[type="date"]::-webkit-calendar-picker-indicator {
   filter: invert(1); /* Cambia el color del ícono a negro */
 }
+
+input[type="date"] {
+  -webkit-appearance: none; /* Elimina el estilo por defecto en Webkit (Chrome, Safari) */
+  appearance: none; /* Elimina el estilo por defecto en todos los navegadores compatibles */
+  background-color: white;
+  border-radius: 10px;
+  padding: 12px;
+  border: 2px solid black;
+  width: 100%;
+  color: black;
+  font-family: inherit; /* Hereda la fuente del contenedor */
+  cursor: pointer;
+}

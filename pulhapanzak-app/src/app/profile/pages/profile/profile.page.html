@@ -15,6 +15,9 @@
     <div [ngClass]="'div'">
       <!--user.photo obtiene la photo de firebase-->
       <ion-img [src]="user.imageProfile" [ngClass]="'image-profile'" (click)="onPickImage()"></ion-img>
+      <ion-note class="form--error-menssage">
+        <span *ngIf="isImageProfileInvalid"> Seleccione una foto de perfil*</span>
+      </ion-note>
     </div>
 
     <!--ion-label e ion-input para Nombres: -->
@@ -66,8 +69,8 @@
       </div>
       <input type="date" formControlName="birthDate" max="{{ today | date:'yyyy-MM-dd' }}" [ngClass]="
       {
-        'ionInputStyle': !isBirthDateInvalid && !isBirthDateInFuture,
-        'ionInputStyle-invalid': isBirthDateInvalid || isBirthDateInvalid
+        'ionInputDateStyle': !isBirthDateInvalid && !isBirthDateInFuture,
+        'ionInputDateStyle-invalid': isBirthDateInvalid || isBirthDateInvalid
       }">
     </div>
     <!--FIN ion-label e ion-input para fecha de nacimiento-->
