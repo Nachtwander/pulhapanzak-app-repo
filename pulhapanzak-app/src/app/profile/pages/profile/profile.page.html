@@ -14,6 +14,7 @@
 
     <div [ngClass]="'div'">
       <!--user.photo obtiene la photo de firebase-->
+      <ion-icon name="camera-outline" *ngIf="isImageProfileInvalid" [ngClass]="'ion-icon'"></ion-icon>
       <ion-img [src]="user.imageProfile" [ngClass]="'image-profile'" (click)="onPickImage()"></ion-img>
       <ion-note class="form--error-menssage">
         <span *ngIf="isImageProfileInvalid"> Seleccione una foto de perfil*</span>

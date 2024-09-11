@@ -9,6 +9,7 @@ import {
   idCardOutline,
   callOutline,
   calendarOutline,
+  cameraOutline,
 } from 'ionicons/icons';
 import { AuthService } from 'src/app/auth/services/auth/auth.service';
 import { Router } from '@angular/router';
@@ -159,7 +160,8 @@ export class ProfilePage implements OnInit {
   }
 
   get isImageProfileInvalid(): boolean {
-    const control: AbstractControl | null = this.profileForm.get('imageProfile');
+    const control: AbstractControl | null =
+      this.profileForm.get('imageProfile');
     return control ? control.invalid : false;
   }
 
@@ -243,7 +245,14 @@ export class ProfilePage implements OnInit {
   }
 
   constructor() {
-    addIcons({personOutline,calendarOutline,atCircleOutline,idCardOutline,callOutline});
+    addIcons({
+      personOutline,
+      calendarOutline,
+      atCircleOutline,
+      idCardOutline,
+      callOutline,
+      cameraOutline,
+    });
   }
 
   ngOnInit() {
@@ -287,7 +296,6 @@ export class ProfilePage implements OnInit {
       this.disabled = true;
       let user: registerDto = this.profileForm.value as registerDto;
       user.correo = this.user.correo;
-      
 
       this._profileService
         .uploadImage(user.imageProfile, user.uid) //user.imageProfile viene de onPickImage()
@@ -305,7 +313,8 @@ export class ProfilePage implements OnInit {
               this.disabled = false;
               await this.showAlert('Ha Ocurrido un error', true);
             });
-        }).catch(async () => {
+        })
+        .catch(async () => {
           this.spinner = false;
           this.disabled = false;
           await this.showAlert('Ha Ocurrido un error', true);
