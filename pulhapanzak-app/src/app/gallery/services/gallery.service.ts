@@ -55,7 +55,7 @@ export class GalleryService {
     );
     const gallerySnapshot = await getDocs(galleryQuery); //galleySnapshot optiene el valor de la galeria con uid
     if (gallerySnapshot.empty) {
-      return null; //si esta vacio, datos vacios
+      return []; //si esta vacio, datos vacios
     }
     return gallerySnapshot.docs.map((doc) => doc.data() as galleryDto);
     // Si gallerySnapshot no está vacío, retorna un array con todos los documentos encontrados.

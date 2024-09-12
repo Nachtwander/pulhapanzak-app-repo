@@ -13,11 +13,24 @@
   <form style="width: 100%" [formGroup]="profileForm" (ngSubmit)="onSubmit()">
 
     <div [ngClass]="'div'">
-      <!--user.photo obtiene la photo de firebase-->
-      <ion-icon name="camera-outline" *ngIf="isImageProfileInvalid" [ngClass]="'ion-icon'"></ion-icon>
-      <ion-img [src]="user.imageProfile" [ngClass]="'image-profile'" (click)="onPickImage()"></ion-img>
+      <!-- Muestra el ion-icon si no hay imagen -->
+      <ion-icon 
+        name="camera-outline" 
+        *ngIf="!user.imageProfile" 
+        [ngClass]="'ion-icon-img'"
+        (click)="onPickImage()">
+      </ion-icon>
+      
+      <!-- Muestra el ion-img si existe imagen -->
+      <ion-img 
+        *ngIf="user.imageProfile" 
+        [src]="user.imageProfile" 
+        [ngClass]="'image-profile'" 
+        (click)="onPickImage()">
+      </ion-img>
+      
       <ion-note class="form--error-menssage">
-        <span *ngIf="isImageProfileInvalid"> Seleccione una foto de perfil*</span>
+        <span *ngIf="isImageProfileInvalid">Seleccione una foto de perfil*</span>
       </ion-note>
     </div>
 

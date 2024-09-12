@@ -245,14 +245,7 @@ export class ProfilePage implements OnInit {
   }
 
   constructor() {
-    addIcons({
-      personOutline,
-      calendarOutline,
-      atCircleOutline,
-      idCardOutline,
-      callOutline,
-      cameraOutline,
-    });
+    addIcons({cameraOutline,personOutline,calendarOutline,atCircleOutline,idCardOutline,callOutline});
   }
 
   ngOnInit() {

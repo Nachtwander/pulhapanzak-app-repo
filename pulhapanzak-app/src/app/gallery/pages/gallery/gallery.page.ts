@@ -23,6 +23,7 @@ import {
   IonFabButton,
   IonIcon,
 } from '@ionic/angular/standalone';
+import { galleryDto } from 'src/app/auth/models/galerry.dto';
 
 @Component({
   selector: 'app-gallery',
@@ -57,7 +58,7 @@ export class GalleryPage implements OnInit {
   //variable para utilizar toast alert
   private _toastController: ToastController = inject(ToastController);
 
-  galleryItems: any[] | null = []; // Almacena los elementos de la galería
+  galleryItems: galleryDto[] | null = []; // Almacena los elementos de la galería
 
   constructor() {
     addIcons({ addCircleOutline});
