@@ -12,7 +12,7 @@ import {
 import { galleryDto } from 'src/app/auth/models/galerry.dto';
 
 const folder: string = 'Galleries';
-const PATH: string = 'users';
+
 
 @Injectable({
   providedIn: 'root',
@@ -20,14 +20,13 @@ const PATH: string = 'users';
 export class GalleryService {
   private _auth: Auth = inject(Auth);
   private _firestore: Firestore = inject(Firestore);
+
   private _collectionGallery: CollectionReference = collection(
     this._firestore,
     folder
   );
-  private _collectionUsers: CollectionReference = collection(
-    this._firestore,
-    PATH
-  );
+
+ 
 
   constructor() {}
 

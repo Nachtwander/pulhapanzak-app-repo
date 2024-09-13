@@ -15,6 +15,8 @@ const folder: string = 'users';
 export class ProfileService {
   private _storage: Storage = inject(Storage);
 
+  
+
   async uploadImage(image: string, userId: string): Promise<string> {
     try {
       const url = `${folder}/${userId}.png`; //url sera igual al folder y la ruta con userID y guardara la imagen en tipo.jpg, podemos usar .avi o .mp4 para subir videos.

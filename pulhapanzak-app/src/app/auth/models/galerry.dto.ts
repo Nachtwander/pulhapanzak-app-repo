@@ -1,6 +1,8 @@
+import { Timestamp } from "firebase/firestore";
+
 export interface galleryDto {
     active: boolean
-    createdAt: string;
+    createdAt: Timestamp;
     createdBy: string;
     description: string;
     photo: string;
