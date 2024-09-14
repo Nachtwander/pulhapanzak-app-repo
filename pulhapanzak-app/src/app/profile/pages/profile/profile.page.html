@@ -5,32 +5,21 @@
 </ion-header>
 
 <ion-content [fullscreen]="true" [ngClass]="'ion-content'">
-  <h2 [ngClass]="'h2'">
-    Perfil
-  </h2>
 
   <!-- Creamos formulario de Registro, el (ngSubmit)="save()" activa la funcion save() -->
   <form style="width: 100%" [formGroup]="profileForm" (ngSubmit)="onSubmit()">
 
     <div [ngClass]="'div'">
       <!-- Muestra el ion-icon si no hay imagen -->
-      <ion-icon 
-        name="camera-outline" 
-        *ngIf="!user.imageProfile" 
-        [ngClass]="'ion-icon-img'"
-        (click)="onPickImage()">
+      <ion-icon name="camera-outline" *ngIf="!user.imageProfile" [ngClass]="'ion-icon-img'" (click)="onPickImage()">
       </ion-icon>
-      
+
       <!-- Muestra el ion-img si existe imagen -->
-      <ion-img 
-        *ngIf="user.imageProfile" 
-        [src]="user.imageProfile" 
-        [ngClass]="'image-profile'" 
-        (click)="onPickImage()">
+      <ion-img *ngIf="user.imageProfile" [src]="user.imageProfile" [ngClass]="'image-profile'" (click)="onPickImage()">
       </ion-img>
-      
+
       <ion-note class="form--error-menssage">
-        <span *ngIf="isImageProfileInvalid">Seleccione una foto de perfil tocando la imagen.*</span>
+        <span *ngIf="isImageProfileInvalid">Seleccione una foto de perfil tocando el icono.*</span>
       </ion-note>
     </div>
 
@@ -158,7 +147,8 @@
     </div>
 
     <div style="display: flex; justify-content: center; margin-top: 20px">
-      <ion-button (click)="logOut()">Cerrar Sesion</ion-button>
+      <ion-button (click)="logOut()"> <ion-icon name="log-out-outline" [ngClass]="'ion-icon'"></ion-icon> Cerrar
+        Sesion</ion-button>
     </div>
   </form>
 </ion-content>

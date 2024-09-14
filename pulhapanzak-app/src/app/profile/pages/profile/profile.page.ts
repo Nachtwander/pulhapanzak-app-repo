@@ -10,6 +10,7 @@ import {
   callOutline,
   calendarOutline,
   cameraOutline,
+  logOutOutline,
 } from 'ionicons/icons';
 import { AuthService } from 'src/app/auth/services/auth/auth.service';
 import { Router } from '@angular/router';
@@ -245,7 +246,7 @@ export class ProfilePage implements OnInit {
   }
 
   constructor() {
-    addIcons({cameraOutline,personOutline,calendarOutline,atCircleOutline,idCardOutline,callOutline});
+    addIcons({cameraOutline,personOutline,calendarOutline,atCircleOutline,idCardOutline,callOutline, logOutOutline});
   }
 
   ngOnInit() {
