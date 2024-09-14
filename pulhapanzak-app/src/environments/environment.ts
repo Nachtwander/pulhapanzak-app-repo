@@ -3,7 +3,8 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  
 };
 
 /*
@@ -15,6 +16,6 @@ export const environment = {
  */
 // import 'zone.js/plugins/zone-error';  // Included with Angular CLI.
 
-API_URL: 'https://rickandmortyapi.com/api/character/'
+
 
 

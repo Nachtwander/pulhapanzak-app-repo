@@ -1,34 +1,44 @@
-#container {
-  text-align: center;
 
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
+
+ion-item {
+  --background: #ffffff; // Fondo blanco
+  --border-radius: 12px; // Bordes redondeados
+  margin-bottom: 12px; // Separación entre elementos
+  padding: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); // Sombras para un efecto de tarjeta
+
+  // Asegúrate de que el border-radius se aplique a los elementos internos también
+  border-radius: var(--border-radius); 
+
+  ion-avatar {
+    --border-radius: 20%; // Hacer la imagen circular
+    width: 60px;
+    height: 60px;
+  }
+
+  ion-label {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    font-size: 16px;
+
+    h2 {
+      font-size: 18px;
+      font-weight: bold;
+      margin: 0;
+      color: #333; // Color del nombre
+    }
+
+    p {
+      font-size: 14px;
+      margin: 2px 0;
+      color: rgb(51, 51, 51); // Color del texto secundario
+    }
+  }
 }
 
-#container strong {
-  font-size: 20px;
-  line-height: 26px;
-}
 
-#container p {
-  font-size: 16px;
-  line-height: 22px;
-
-  color: #8c8c8c;
-
-  margin: 0;
-}
-
-#container a {
-  text-decoration: none;
-}
-
-.h2 {
-  display: flex;
-  justify-content: center;
-  color: red;
-  font-weight: bold;
+ion-list {
+  background-color: white;
+  padding: 12px; // Añade un padding para que los items no toquen los bordes
 }

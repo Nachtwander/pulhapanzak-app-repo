@@ -11,8 +11,14 @@ import {
   IonButton,
   ToastController,
   IonNote,
+  IonItem,
+  IonList,
+  IonAvatar,
+  IonLabel,
 } from '@ionic/angular/standalone';
 import { registerDto } from 'src/app/auth/models/register.dto';
+import { HomeService } from '../../services/home.service';
+import { postDto } from '../../models/post.dto';
 
 @Component({
   selector: 'app-home',
@@ -20,6 +26,8 @@ import { registerDto } from 'src/app/auth/models/register.dto';
   styleUrls: ['home.page.scss'],
   standalone: true,
   imports: [
+    IonList,
+    IonItem,
     IonNote,
     IonHeader,
     IonToolbar,
@@ -28,6 +36,8 @@ import { registerDto } from 'src/app/auth/models/register.dto';
     RegisterPage,
     IonButton,
     CommonModule,
+    IonAvatar,
+    IonLabel,
   ],
 })
 export class HomePage implements OnInit {
@@ -38,25 +48,14 @@ export class HomePage implements OnInit {
   //variable para utilizar toast alert
   private _toastController: ToastController = inject(ToastController);
 
+  private _homeService: HomeService = inject(HomeService);
+
   usuario: registerDto | null = null;
-  usuariologgued: string = '';
+  usuarioLoggued: string = '';
+
+  characters: postDto[] = [];
 
   constructor() {}
-
-  async logOut(): Promise<void> {
-    await this._authService
-      .singOut()
-      .then(async () => {
-        this._router.navigate(['/login']);
-        await this.showAlert('se ha cerrardo la sesion');
-      })
-      .catch(async (error) => {
-        await this.showAlert(
-          'ocurrio un error al intentar cerrar la sesion',
-          true
-        );
-      });
-  }
 
   async showAlert(message: string, isError: boolean = false): Promise<void> {
     const toast = await this._toastController.create({
@@ -76,9 +75,9 @@ export class HomePage implements OnInit {
       const user = await this._authService.getUserByID();
       this.usuario = user;
       if (this.usuario) {
-        this.usuariologgued = `${this.usuario.nombres} ${this.usuario.apellidos}`;
+        this.usuarioLoggued = `${this.usuario.nombres} ${this.usuario.apellidos}`;
       }
-      console.log('userByID => ', user);
+      //console.log('userByID => ', user);
     } catch {
       await this.showAlert(
         'ocurrió un error al intentar obtener datos de sesión (getUserByID)',
@@ -86,19 +85,28 @@ export class HomePage implements OnInit {
       );
     }
 
-    //getUserByQuery
-    await this._authService
-      .getUserByQuery()
-      .then(async (user) => {
-        console.log('userByQuery => ', user);
-      })
-      .catch(async (error) => {
-        console.log('error => ', error);
-        await this.showAlert(
-          'ocurrio un error al intentar obtener datos de sesión (getUserByQuery)',
-          true
-        );
-      });
+    // usamos servicio getPosts() de HomeService e imprimimos los resultados de la API
+    this._homeService.getPosts().subscribe((result) => {
+      //console.log(result);
+    });
+
+    // usamos servicio getPost(id) de HomeService e imprimimos los resultados de la API
+    this._homeService.getPost(5).subscribe((result) => {
+      //console.log(result);
+    });
+
+    /*this._homeService.deletePost(5).subscribe(result => {
+    console.log(result)
+   }) */
+
+    this._homeService.getPosts().subscribe(
+      (data: { results: postDto[] }) => {
+        this.characters = data.results; // Accede al array de personajes
+      },
+      (error) => {
+        console.error('Error fetching characters: ', error);
+      }
+    );
   }
   //final
 }
