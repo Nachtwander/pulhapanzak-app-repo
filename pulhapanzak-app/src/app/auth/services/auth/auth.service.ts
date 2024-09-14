@@ -2,6 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { loginDto } from '../../models/login.dto';
 import { registerDto } from '../../models/register.dto';
 import { passwordResetDto } from '../../models/passwordReset.dto';
+import { deviceDto } from '../../models/device.dto';
 // importamos lo necesario para la autenticacion
 import {
   Auth,
@@ -26,9 +27,11 @@ import {
   deleteDoc,
   orderBy,
   updateDoc,
+  addDoc,
 } from '@angular/fire/firestore';
 
 const PATH: string = 'users';
+const devicePath: string = 'devices';
 
 @Injectable({
   providedIn: 'root',
@@ -59,6 +62,7 @@ export class AuthService {
       uid: docRef.id,
       isActive: true,
       imageProfile: '',
+      deviceID: '',
     });
   }
 
@@ -145,6 +149,12 @@ export class AuthService {
     });
   }
 
+  //para obtener el UID de firebase a travez de getCurrentUser()
+  async getCurrentUserId(): Promise<string | null> {
+    const user = await this.getCurrentUser();
+    return user?.uid ?? null;
+  }
+
   //metodo GET para obtener usuario por el UID del documento
   async getUserByID(): Promise<registerDto | null> {
     try {
@@ -196,10 +206,13 @@ export class AuthService {
         dni: user.dni,
         telefono: user.telefono,
         imageProfile: user.imageProfile, //para actualizar foto de perfil
-        birthDate: user.birthDate
+        birthDate: user.birthDate,
+        deviceID: ''
       },
     });
   }
+
+
 
   //metodo para eliminar usuario
   async deleteUser(id: string): Promise<void> {
@@ -207,6 +220,14 @@ export class AuthService {
 
     const docRef = doc(this._collection, id);
     await deleteDoc(docRef);
+  }
+
+  async createDevice(userDevice: registerDto): Promise<void> {
+    if (!userDevice.uid) throw new Error('UID del usuario no existe');
+    const docRef = doc(this._collection, userDevice.uid);
+    await updateDoc(docRef,{...{
+      deviceID: userDevice.deviceID
+    }})
   }
   //final
 }

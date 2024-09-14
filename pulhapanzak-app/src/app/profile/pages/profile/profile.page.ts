@@ -290,6 +290,7 @@ export class ProfilePage implements OnInit {
       this.disabled = true;
       let user: registerDto = this.profileForm.value as registerDto;
       user.correo = this.user.correo;
+      user.deviceID='';
 
       this._profileService
         .uploadImage(user.imageProfile, user.uid) //user.imageProfile viene de onPickImage()

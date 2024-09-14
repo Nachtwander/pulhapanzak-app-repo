@@ -1,7 +1,10 @@
-// Interface LoginDto (DTO: Data Transfer Object) 
+// Interface registerDto (DTO: Data Transfer Object) 
 //
 
+import { Timestamp } from "firebase/firestore";
+
 export interface registerDto {
+  deviceID: string,
   nombres: string;
   apellidos: string;
   correo: string;
@@ -10,5 +13,5 @@ export interface registerDto {
   telefono: string;
   uid:string;
   imageProfile:string;
-  birthDate: Date;
+  birthDate: Timestamp;
 }
