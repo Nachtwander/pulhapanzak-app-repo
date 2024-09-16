@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { addIcons } from 'ionicons';
 import { atCircleOutline } from 'ionicons/icons';
@@ -20,7 +20,6 @@ import {
   IonHeader,
   IonTitle,
   IonToolbar,
-  IonItem,
   IonInput,
   IonLabel,
   IonButton,
@@ -43,7 +42,6 @@ import {
     IonToolbar,
     CommonModule,
     FormsModule,
-    IonItem,
     IonInput,
     IonLabel,
     IonButton,
@@ -79,39 +77,41 @@ import {
   ],
 })
 export class ForgotPasswordPage {
-   //creamos variable que sera del tipo del servicio AuthService (services\auth) para autenticar al usuario
-   private _authService: AuthService = inject(AuthService);
+  //creamos variable que sera del tipo del servicio AuthService (services\auth) para autenticar al usuario
+  private _authService: AuthService = inject(AuthService);
 
-   //se usa para navegar entre paginas
-   private _router: Router = inject(Router);
+  //se usa para navegar entre paginas
+  private _router: Router = inject(Router);
 
-   private formBuilder: FormBuilder = inject(FormBuilder);
+  private formBuilder: FormBuilder = inject(FormBuilder);
 
-   //variable para utilizar toast alert
-   private _toastController: ToastController = inject(ToastController);
+  //variable para utilizar toast alert
+  private _toastController: ToastController = inject(ToastController);
 
-   spinner: boolean = false;
- 
-   disabled: boolean = false;
- 
-   forgotPasswordForm: FormGroup = this.formBuilder.group({
-     correo: ['', [Validators.required, Validators.email]],
-   });
+  spinner: boolean = false;
 
-   //get para verificar si el formulario es invalido y si es true desativa el boton con [disabled]
+  disabled: boolean = false;
+
+  forgotPasswordForm: FormGroup = this.formBuilder.group({
+    correo: ['', [Validators.required, Validators.email]],
+  });
+
+  //get para verificar si el formulario es invalido y si es true desativa el boton con [disabled]
   get isFormInvalid(): boolean {
     return this.forgotPasswordForm.invalid;
   }
 
   //get que verifica que el campo correo no sea nulo, si el usuario no ingresa un correo valido
   get isEmailRequired(): boolean {
-    const control: AbstractControl | null = this.forgotPasswordForm.get('correo');
+    const control: AbstractControl | null =
+      this.forgotPasswordForm.get('correo');
     return control ? control.hasError('required') && control.touched : false;
   }
 
   //get para verificar que el email sea valido
   get isEmailInvalid(): boolean {
-    const control: AbstractControl | null = this.forgotPasswordForm.get('correo');
+    const control: AbstractControl | null =
+      this.forgotPasswordForm.get('correo');
     return control ? control.hasError('email') && control.touched : false;
   }
 
@@ -122,7 +122,8 @@ export class ForgotPasswordPage {
       //para activar la animacion del spinner
       this.spinner = true;
       //utilizamos una varible de nombre reset del tipo resetPasswordDto que va a obtener el valor del formulario
-      const reset: passwordResetDto = this.forgotPasswordForm.value as passwordResetDto;
+      const reset: passwordResetDto = this.forgotPasswordForm
+        .value as passwordResetDto;
 
       //logica de lo que hara cuando se presione el boton
       this._authService
@@ -133,7 +134,9 @@ export class ForgotPasswordPage {
           this.disabled = false;
           console.log(r);
           //mostrara una alerta cuando el reset tenga exito
-          await this.showAlert('Por favor revise la bandeja de entrada de su correo.');
+          await this.showAlert(
+            'Por favor revise la bandeja de entrada de su correo.'
+          );
           this._router.navigate(['/login']);
           this.resetForm();
         })
@@ -149,7 +152,7 @@ export class ForgotPasswordPage {
     }
   }
 
-  goToLogin(){
+  goToLogin() {
     this.resetForm();
     this._router.navigate(['/login']);
   }
@@ -168,12 +171,7 @@ export class ForgotPasswordPage {
     toast.present();
   }
 
- 
-   constructor() {
-     addIcons({
-       'at-circle-outline': atCircleOutline,
-     });
-   }
-
-  
+  constructor() {
+    addIcons({ atCircleOutline });
+  }
 }

@@ -100,8 +100,8 @@ export class LoginPage {
 
   constructor() {
     addIcons({
-      'at-circle-outline': atCircleOutline,
-      'lock-open-outline': lockOpenOutline,
+      atCircleOutline,
+      lockOpenOutline,
     });
   }
 

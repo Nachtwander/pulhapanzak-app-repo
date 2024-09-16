@@ -2,7 +2,13 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { registerDto } from '../../models/register.dto';
 import { addIcons } from 'ionicons';
-import { atCircleOutline, lockOpenOutline, personOutline, idCardOutline, callOutline } from 'ionicons/icons';
+import {
+  atCircleOutline,
+  lockOpenOutline,
+  personOutline,
+  idCardOutline,
+  callOutline,
+} from 'ionicons/icons';
 import { AuthService } from '../../services/auth/auth.service';
 import { Router } from '@angular/router';
 import {
@@ -26,7 +32,7 @@ import {
   IonNote,
   IonIcon,
   IonInputPasswordToggle,
-  ToastController
+  ToastController,
 } from '@ionic/angular/standalone';
 
 @Component({
@@ -50,7 +56,6 @@ import {
     IonNote,
     IonIcon,
     IonInputPasswordToggle,
-    
   ],
   styles: [
     `
@@ -75,11 +80,10 @@ import {
         --padding-end: 10px;
         margin-top: 10px;
       }
-
     `,
   ],
 })
-export class RegisterPage{
+export class RegisterPage {
   /*
   "Estamos creando una propiedad privada llamada formBuilder que es del tipo FormBuilder, y la estamos inicializando 
   usando la función inject para obtener una instancia de FormBuilder."
@@ -102,7 +106,6 @@ export class RegisterPage{
 
   //variable para utilizar toast alert
   private _toastController: ToastController = inject(ToastController);
-
 
   disabled: boolean = false;
 
@@ -241,28 +244,31 @@ export class RegisterPage{
       //declaramos la variable newUser que seria ugual a los valores del formulario de registo y se parsearan al tipo registerDto
       let newUser: registerDto = this.registerForm.value as registerDto;
 
-      this._authService.singUp(newUser).then(async (result) => {
-        newUser.uid = result.user.uid;
-        await this._authService.createUserInfirestore(newUser).then (async () =>{
+      this._authService
+        .singUp(newUser)
+        .then(async (result) => {
+          newUser.uid = result.user.uid;
+          await this._authService
+            .createUserInfirestore(newUser)
+            .then(async () => {
+              this.spinner = false;
+              this.disabled = false;
+              console.log(result);
+              //mostrara una alerta cuando se ingrese con exito
+              await this.showAlert('Usuario registrado con exito');
+              this._router.navigate(['/tabs/home']);
+              this.resetForm();
+            });
+        })
+        .catch(async () => {
           this.spinner = false;
           this.disabled = false;
-          console.log(result);
-          //mostrara una alerta cuando se ingrese con exito
-          await this.showAlert('Usuario registrado con exito');
-          this._router.navigate(['/tabs/home']);
-          this.resetForm();
+          //si hay un error mostrara una alerta indicando error
+          await this.showAlert(
+            'Ocurrio un error, revise los campos e intentelo de nuevo',
+            true
+          );
         });
-
-      }).catch(async () => {
-        this.spinner = false;
-        this.disabled = false;
-        //si hay un error mostrara una alerta indicando error
-        await this.showAlert(
-          'Ocurrio un error, revise los campos e intentelo de nuevo',
-          true
-        );
-      });
-        
     }
   }
 
@@ -280,23 +286,18 @@ export class RegisterPage{
     toast.present();
   }
 
-  goToLogin(){
+  goToLogin() {
     this.resetForm();
     this._router.navigate(['/login']);
   }
 
-
-  constructor(){
+  constructor() {
     addIcons({
-      'at-circle-outline': atCircleOutline,
-      'lock-open-outline': lockOpenOutline,
-      'person-outline': personOutline,
-      'id-card-outline': idCardOutline,
-      'call-outline': callOutline,
-    })
-  
+      atCircleOutline,
+      lockOpenOutline,
+      personOutline,
+      idCardOutline,
+      callOutline,
+    });
   }
 }
-
-  
-

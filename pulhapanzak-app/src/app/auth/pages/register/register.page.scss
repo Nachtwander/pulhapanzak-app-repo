@@ -19,3 +19,41 @@
     margin-top: 30px;
     text-align: center;
 }
+
+.ion-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    --background: #ffffff;
+    padding: 16px;
+  }
+  
+  .h2 {
+    display: flex;
+    justify-content: center;
+    color: red;
+    font-weight: bold;
+  }
+  
+  .ion-icon {
+    color: black;
+    font-size: 24px;
+    padding-right: 5px;
+  }
+  
+  
+  .div{
+    padding: 5px;
+  }
+  
+  .divIconLabel{
+    display: flex;
+    align-items: center;
+  }
+
+  .divButton {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+  }

@@ -1,24 +1,15 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+
 import { GalleryService } from '../../services/gallery.service';
 import { CommonModule } from '@angular/common';
 import { addIcons } from 'ionicons';
-import {addCircleOutline} from 'ionicons/icons';
+import { addCircleOutline } from 'ionicons/icons';
 import {
   IonHeader,
   IonToolbar,
   IonTitle,
   IonContent,
-  IonButton,
   ToastController,
-  IonNote,
-  IonGrid,
-  IonCardHeader,
-  IonRow,
-  IonCard,
-  IonCol,
-  IonCardTitle,
-  IonCardContent,
   IonFab,
   IonFabButton,
   IonIcon,
@@ -35,15 +26,6 @@ import { galleryDto } from 'src/app/auth/models/galerry.dto';
     IonToolbar,
     IonTitle,
     IonContent,
-    IonButton,
-    IonNote,
-    IonGrid,
-    IonCardHeader,
-    IonRow,
-    IonCard,
-    IonCol,
-    IonCardTitle,
-    IonCardContent,
     CommonModule,
     IonFab,
     IonFabButton,
@@ -54,14 +36,13 @@ export class GalleryPage implements OnInit {
   //creamos variable que injectamos GalleryService
   private _galleryService: GalleryService = inject(GalleryService);
   //se usa para navegar entre paginas
-  private _router: Router = inject(Router);
   //variable para utilizar toast alert
   private _toastController: ToastController = inject(ToastController);
 
   galleryItems: galleryDto[] | null = []; // Almacena los elementos de la galería
 
   constructor() {
-    addIcons({ addCircleOutline});
+    addIcons({ addCircleOutline });
   }
 
   async ngOnInit(): Promise<void> {
