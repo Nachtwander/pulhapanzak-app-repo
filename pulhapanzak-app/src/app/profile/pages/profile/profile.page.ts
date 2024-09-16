@@ -246,7 +246,15 @@ export class ProfilePage implements OnInit {
   }
 
   constructor() {
-    addIcons({cameraOutline,personOutline,calendarOutline,atCircleOutline,idCardOutline,callOutline, logOutOutline});
+    addIcons({
+      cameraOutline,
+      personOutline,
+      calendarOutline,
+      atCircleOutline,
+      idCardOutline,
+      callOutline,
+      logOutOutline,
+    });
   }
 
   ngOnInit() {
@@ -286,28 +294,20 @@ export class ProfilePage implements OnInit {
 
   onSubmit(): void {
     if (!this.isFormInvalid) {
-      this.spinner = true;
       this.disabled = true;
+      this.spinner = true;
+
       let user: registerDto = this.profileForm.value as registerDto;
       user.correo = this.user.correo;
-      user.deviceID='';
+      user.deviceID = ''; // Opcional: ajusta si es necesario
 
-      this._profileService
-        .uploadImage(user.imageProfile, user.uid) //user.imageProfile viene de onPickImage()
-        .then(async (url: string) => {
-          user.imageProfile = url;
-          this._authService
-            .updateUser(user)
-            .then(async () => {
-              this.spinner = false;
-              this.disabled = false;
-              await this.showAlert('Datos de Usuario Actualizados');
-            })
-            .catch(async () => {
-              this.spinner = false;
-              this.disabled = false;
-              await this.showAlert('Ha Ocurrido un error', true);
-            });
+      // Solo llamas a updateUser sin la subida de la imagen
+      this._authService
+        .updateUser(user)
+        .then(async () => {
+          this.spinner = false;
+          this.disabled = false;
+          await this.showAlert('Datos de Usuario Actualizados');
         })
         .catch(async () => {
           this.spinner = false;
@@ -347,6 +347,32 @@ export class ProfilePage implements OnInit {
 
     this.user.imageProfile = image.webPath ?? image.path ?? '';
     this.profileForm.patchValue({ imageProfile: this.user.imageProfile });
+
+    // Ahora se sube la imagen
+    if (this.user.uid) {
+      let user: registerDto = this.profileForm.value as registerDto;
+      this.spinner = true;
+      this.disabled = true;
+      try {
+        const uploadedImageUrl = await this._profileService.uploadImage(
+          user.imageProfile,
+          this.user.uid
+        );
+
+        this.profileForm.patchValue({ imageProfile: uploadedImageUrl });
+        // Ahora se actualiza el perfil del usuario con la nueva imagen
+        user.imageProfile = uploadedImageUrl;
+        await this._authService.updateUser(user);
+
+        this.spinner = false;
+        this.disabled = false;
+        await this.showAlert('Imagen subida correctamente');
+      } catch (error) {
+        this.spinner = false;
+        this.disabled = false;
+        await this.showAlert('Error al subir la imagen', true);
+      }
+    }
   }
 
   //final

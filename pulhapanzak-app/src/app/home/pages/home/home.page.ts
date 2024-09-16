@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { RegisterPage } from 'src/app/auth/pages/register/register.page';
 import { AuthService } from 'src/app/auth/services/auth/auth.service';
 import { CommonModule } from '@angular/common';
+import { NotificationService } from 'src/app/services/notification-service.service';
 import {
   IonHeader,
   IonToolbar,
@@ -50,6 +51,9 @@ export class HomePage implements OnInit {
 
   private _homeService: HomeService = inject(HomeService);
 
+  private notificationService: NotificationService =
+    inject(NotificationService);
+
   usuario: registerDto | null = null;
   usuarioLoggued: string = '';
 
@@ -69,6 +73,7 @@ export class HomePage implements OnInit {
 
   //utilizamos el ngOnInit para probar el metodo getCurrentUser de AuthService
   async ngOnInit(): Promise<void> {
+    await this.notificationService.initializePushNotifications();
     //getUserByID
     try {
       // Obtener usuario por ID

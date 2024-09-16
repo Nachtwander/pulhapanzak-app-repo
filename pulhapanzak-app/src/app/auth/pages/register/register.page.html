@@ -131,7 +131,7 @@ components - models - pages - services
 
       <!-- ion-button y ion-spinner para registrar usuario -->
       <div [ngClass]="'divButton'">
-        <ion-button type="submit" color="success" [disabled]="isFormInvalid">
+        <ion-button type="submit" color="success" [disabled]="isFormInvalid || disabled">
           <!--*ngIf activara la animacion cuando spinner sea true-->
           <ion-spinner *ngIf="spinner" style="margin-right: 10px"></ion-spinner>
           Registrar
